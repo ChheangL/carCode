@@ -38,16 +38,16 @@ def perform_3sig(data,s1,hd):
 def retrieve_angle(s1,hd,img_path,frame):
     data = frame.get_data(img_path,1) #remove coordinate
     edges = perform_3sig(data,s1,hd)
-    print(edges)
+    #print(edges)
     points = np.empty((0,2),float)
-    print(points)
+    #print(points)
     for key in edges.keys():
         if np.isnan(edges[key]):
-            cord = [np.Nan,np.Nan]
-            print('not found')
+            cord = [np.NaN,np.NaN]
+            #print('not found')
         else:
             cord = frame.lines_frame[key][edges[key]]
-            print('found')
+            #print('found')
         points = np.append(points,[cord],axis=0)
     #print(mids_point[:,2])
     mid_points = mid_angle(points,frame.width,frame.height)
