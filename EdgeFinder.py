@@ -31,35 +31,36 @@ class EdgeFinder :
     
     #the function that do the stuff above
     def check_abnormal(self,init):
-        states={} #empty dictionary discribing the current interveral data
+        states=0 #empty dictionary discribing the current interveral data
         end=init+self.s1 #a stop for the s1 interval
-        states['num'] = end #start checking at that posision of data
+        states = end #start checking at that posision of data
 
         #get the upperbound and lowerbound of the data
-        states['up'],states['low'] = self.get_3sigmaBound(self.data[init : end])
+        upper,lower = self.get_3sigmaBound(self.data[init : end])
 
         #loop and check for abnormal data with upper and lower bound
         for Data in self.data[end:end+self.hd]:
             #if found abnormal, return the dictionary
-            if Data >= states['up'] or Data <= states['low']: return states
-            states['num'] += 1
+            if Data >= upper or Data <= lower: return states
+            states += 1
         #loop is done, and num is noted at Nan
-        states['num'] = np.NaN
+        states = np.NaN
         return states
 
     def perform_3sig(self):
         init = 0 #act as the starting position for the operation
-        result = {'up':[],'low':[]} #empty dictionary for result appending
+        #result = {'up':[],'low':[]} #empty dictionary for result appending
+        result = np.NaN
         while True:
             #limter for operation going over the data value
             if init+self.s1+self.hd >= len(self.data) : break
             #call in the operation to check the abnormal value
             states = self.check_abnormal(init)
-            result['low'].append(states['low']) # append everything to the result
-            result['up'].append(states['up'])
+            #result['low'].append(states['low']) # append everything to the result
+            #result['up'].append(states['up'])
             #check if the data found a abnormal. if so, the operation terminate
-            if not np.isnan(states['num']) :
-                result['num'] = states['num']
+            if not np.isnan(states) :
+                result = states
                 break
             #move to next hd
             init += self.hd 

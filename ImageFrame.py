@@ -54,11 +54,11 @@ class Frame:
         lines = {}
         for key in self.lines_frame.keys():
             count = 0
-            temp2 = np.empty((0,3),float)
+            temp2 = np.empty((0,1),float)
             for cord in self.lines_frame[key]:
                 #print(lines[key][count])
-                temp1 = [img[int(cord[1]),int(cord[0])]]
-                temp2 = np.append(temp2,[temp1],axis=0)
+                temp1 = img[int(cord[1]),int(cord[0])]
+                temp2 = np.append(temp2,[temp1])
                 count+=1
             lines[key] = np.flip(temp2,axis=0)
         return lines

@@ -28,24 +28,27 @@ def perform_3sig(data,s1,hd):
     edges = {}
     for key in data.keys():
         detect = ef(s1,hd,data[key])
-        if 'num' in detect.abnormal.keys():
-            index_edg = detect.abnormal['num']
-            edges[key] = index_edg
-        else:
-            edges[key]= np.NaN
+        #if 'num' in detect.abnormal.keys():
+        index_edg = detect.abnormal
+        edges[key] = index_edg
+        #else:
+            #edges[key]= np.NaN
     return edges
 
-def retrieve_angle(s1,hd,img_path,frame,plot = False):
+def retrieve_angle(s1,hd,img_path,frame):
     data = frame.get_data(img_path,1) #remove coordinate
-    edges = perform_3sig(data,s1,hd,False)
+    edges = perform_3sig(data,s1,hd)
+    print(edges)
     points = np.empty((0,2),float)
+    print(points)
     for key in edges.keys():
         if np.isnan(edges[key]):
             cord = [np.Nan,np.Nan]
+            print('not found')
         else:
             cord = frame.lines_frame[key][edges[key]]
+            print('found')
         points = np.append(points,[cord],axis=0)
     #print(mids_point[:,2])
     mid_points = mid_angle(points,frame.width,frame.height)
-    if plot : plot_on_img(img_path,edges,frame,mid_points)
     return mid_points[:,2]
