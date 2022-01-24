@@ -1,5 +1,4 @@
 import numpy as np
-import pandas as pd
 import pickle as pk
 class Frame:
     """get the coordinate to the lines based on the angle, width and hight provided
