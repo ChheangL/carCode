@@ -43,7 +43,7 @@ def retrieve_angle(s1,hd,img_path,frame):
     print(points)
     for key in edges.keys():
         if np.isnan(edges[key]):
-            cord = [np.Nan,np.Nan]
+            cord = [np.NaN,np.NaN]
             print('not found')
         else:
             cord = frame.lines_frame[key][edges[key]]
