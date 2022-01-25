@@ -4,14 +4,14 @@ from gpiozero import Servo
 from time import sleep
 import cv2
 
-<<<<<<< HEAD
-frame1 = Frame(1000,667,30)
-img = Image.open('road1.jpg')
+#<<<<<<< HEAD
+#frame1 = Frame(1000,667,30)
+#img = Image.open('road1.jpg')
 #cam = cv2.VideoCapture(0)
-=======
-frame1 = Frame(1000,667,10)
+#=======
+frame1 = Frame(1280,720,10)
 cam = cv2.VideoCapture(0)
->>>>>>> 8abfca315126cd31763e8232a39024ec1b1a0202
+#>>>>>>> 8abfca315126cd31763e8232a39024ec1b1a0202
 
 gpioPin = 4
 correction = 0.45
@@ -29,19 +29,12 @@ def servo_begin(servo, angle):
         print("Program stopped")
 
 def main():
-		x=1
-    while True:
-<<<<<<< HEAD
-        #img = cv2.cvtColor(cam.read()[1],cv2.COLOR_BGR2GRAY)
-        angle = retrieve_angle(s1= 60,hd=5,img_path = img,frame = frame1)
-        print(x)
-		x= x+1
-    
-=======
-        img = cam.read()[1]
-        myAngle = retrieve_angle(s1=60, hd=5, img_path=img, frame=frame1)
-        print(myAngle[1])
-        servo_begin(servo=myServo, angle=myAngle[1])
+	x=1
+	while True:
+		img = cam.read()[1]
+		myAngle = retrieve_angle(s1=60, hd=5, img_path=img, frame=frame1)
+		print(myAngle[1])
+		servo_begin(servo=myServo, angle=myAngle[1])
 
->>>>>>> 8abfca315126cd31763e8232a39024ec1b1a0202
+
 main()
