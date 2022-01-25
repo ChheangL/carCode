@@ -1,29 +1,23 @@
 from auto_drive_functions import retrieve_angle
 from ImageFrame import Frame
-from gpiozero import Servo
+from gpiozero import Servo,Motor
 from time import sleep
 import cv2
 import numpy as np
 
-#<<<<<<< HEAD
-#frame1 = Frame(1000,667,30)
-#img = Image.open('road1.jpg')
-#cam = cv2.VideoCapture(0)
-#=======
 frame1 = Frame(640,480,10)
 
 cam = cv2.VideoCapture(0)
-#cam.set(CAP_PROP_FRAME_WIDTH,(unsigned int)1280);
-#cam.set(CAP_PROP_FRAME_HEIGHT,(unsigned int)720);
-#cam.set(3,600)
-#cam.set(4,400)
-#>>>>>>> 8abfca315126cd31763e8232a39024ec1b1a0202
 
+#init servo
 gpioPin = 4
 correction = 0.45
 maxPW = (2.0 + correction) / 1000
 minPW = (1.0 - correction) / 1000
 myServo = Servo(gpioPin, min_pulse_width=minPW, max_pulse_width=maxPW)
+
+#init motor
+motor = Motor(forward = 23, backward = 24, enable = 25, pwm=True)
 
 def servo_begin(servo, angle):
     try:
@@ -34,13 +28,15 @@ def servo_begin(servo, angle):
     except KeyboardInterrupt:
         print("Program stopped")
 
+        
 def main():
-	x=1
+    print('move forward')
+    motor.forward(1)
 	while True:
 		img = np.array(cam.read()[1])
 		#print(img.shape)
-		myAngle = retrieve_angle(s1=60, hd=5, img_path=img, frame=frame1)
-		print(myAngle[1])
+		myAngle = retrieve_angle(s1=100, hd=50, img_path=img, frame=frame1)
+		print('.')
 		servo_begin(servo=myServo, angle=myAngle[1])
 
 
