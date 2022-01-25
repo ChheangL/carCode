@@ -37,7 +37,7 @@ def servo_begin(servo, angle):
 def main():
 	x=1
 	while True:
-		img = cam.read()[1]
+		img = np.array(cam.read()[1])
 		#print(img.shape)
 		myAngle = retrieve_angle(s1=60, hd=5, img_path=img, frame=frame1)
 		print(myAngle[1])
