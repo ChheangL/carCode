@@ -40,7 +40,7 @@ def main():
 		print(myAngle.shape)
 		if math.isnan(myAngle[1]) : continue
 		if myAngle.shape > (1,):
-			myAngle = myAngle[1]
+			myAngle = int((myAngle[1] + myAngle[0])/2)
 		else:
 			myAngle = 90
 
