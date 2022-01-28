@@ -29,16 +29,26 @@ def servo_begin(servo, angle):
     except KeyboardInterrupt:
         print("Program stopped")
 
-        
+
 def main():
-    print('move forward')
-    motor.forward(1)
-    while True:
-        img = np.array(cam.read()[1])
-        #print(img.shape)
-        myAngle = retrieve_angle(s1=100, hd=50, img_path=img, frame=frame1)
-        print('.')
-        servo_begin(servo=myServo, angle=myAngle[1])
+	print('move forward')
+	motor.forward(1)
+	while True:
+		img = np.array(cam.read()[1])
+		#print(img.shape)
+		myAngle = retrieve_angle(s1=60, hd=10, img_path=img, frame=frame1)
+		print(myAngle.shape)
+		if myAngle.shape >= (4,):
+			myAngle = int(myAngle[1])
+		else :
+			myAngle = 90
+		if myAngle <= 80 or myAngle >= 100 : 
+			print('slow')
+			motor.forward(0.5)
+		else:
+			print('fast')
+			motor.forward(1)
+		servo_begin(servo=myServo, angle=myAngle)
 
 
 main()
