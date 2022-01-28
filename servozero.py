@@ -8,9 +8,9 @@ def servo_setup(gpioPin=4, correction=0.45):
 
 def servo_begin(servo, angle):
     try:
+	print("Angle: ", angle)
         angleValue = (2/180 * angle - 1)
         servo.value = angleValue
-        print("Angle: ", angleValue)
         sleep(1)
     except KeyboardInterrupt:
         print("Program stopped")
