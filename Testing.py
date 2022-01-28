@@ -17,6 +17,7 @@ minPW = (1.0 - correction) / 1000
 myServo = Servo(gpioPin, min_pulse_width=minPW, max_pulse_width=maxPW)
 
 #init motor
+print('init motor')
 motor = Motor(forward = 23, backward = 24, enable = 25, pwm=True)
 
 def servo_begin(servo, angle):
@@ -32,12 +33,12 @@ def servo_begin(servo, angle):
 def main():
     print('move forward')
     motor.forward(1)
-	while True:
-		img = np.array(cam.read()[1])
-		#print(img.shape)
-		myAngle = retrieve_angle(s1=100, hd=50, img_path=img, frame=frame1)
-		print('.')
-		servo_begin(servo=myServo, angle=myAngle[1])
+    while True:
+        img = np.array(cam.read()[1])
+        #print(img.shape)
+        myAngle = retrieve_angle(s1=100, hd=50, img_path=img, frame=frame1)
+        print('.')
+        servo_begin(servo=myServo, angle=myAngle[1])
 
 
 main()
