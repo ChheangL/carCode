@@ -21,6 +21,7 @@ def mid_angle(data,width,height):
     return values
 
 def perform_3sig(data,s1,hd):
+<<<<<<< HEAD
 	edges = {}
 	size = len(data.keys())
 	for num in range(1,int(size/2+1)):
@@ -35,12 +36,31 @@ def perform_3sig(data,s1,hd):
 				edges['L'+str(num)] = index_edg
 		if len(edges.keys()) >= 4 : break
 	return edges
+=======
+    edges = {}
+    size = len(data.keys())
+    for num in range(1,int(size/2+1)):
+        detect = ef(s1,hd,data['L'+str(num)])
+        index_edg = detect.abnormal
+        if not np.isnan(index_edg): 
+            detect2 = ef(s1,hd,data['L'+str((size+1-num))])
+            index_edg2 = detect2.abnormal
+            if not np.isnan(index_edg2):
+                edges['L'+str(num)] = index_edg
+                edges['L'+str((size+1-num))] = index_edg2
+        if len(edges.keys()) >= 4 : break 
+    return edges
+>>>>>>> 47c6ef3100bad6a57c5ee9fda355b19fcfc9c66d
 
 def retrieve_angle(s1,hd,img_path,frame):
     data = frame.get_data(img_path,1) #remove coordinate
     edges = perform_3sig(data,s1,hd)
     print(edges)
+<<<<<<< HEAD
     #points = np.empty((0,2),float)
+=======
+    points = np.empty((0,2),float)
+>>>>>>> 47c6ef3100bad6a57c5ee9fda355b19fcfc9c66d
     #print(points)
     #for key in edges.keys():
     #    if np.isnan(edges[key]):
