@@ -43,23 +43,23 @@ def main():
 		x=x+1
 		
 		#print(img.shape)
-		myAngle = retrieve_angle(s1=60, hd=5, img_path=img, frame=frame1)
-		print(myAngle.shape)
+		retrieve_angle(s1=60, hd=5, img_path=img, frame=frame1)
+		#print(myAngle.shape)
 		
-		if myAngle.shape > (1,):
-			if math.isnan(myAngle[1]) : continue
-			myAngle = myAngle[1]
-		else:
-			myAngle = 90
+		#if myAngle.shape > (1,):
+		#	if math.isnan(myAngle[1]) : continue
+		#	myAngle = myAngle[1]
+		#else:
+		#	myAngle = 90
 		
-		if myAngle <= 80 or myAngle >= 100 :
-			print('slow')
-			motor.forward(0.25)
-		else:
-			print('fast')
-			motor.forward(0.25)
-		
-		servo_begin(servo=myServo, angle=myAngle)
-		print('runtime : '+str(timeit.default_timer() - start))
+		#if myAngle <= 80 or myAngle >= 100 :
+		#	print('slow')
+		#	motor.forward(0.25)
+		#else:
+		#	print('fast')
+		#	motor.forward(0.25)
+		#
+		#servo_begin(servo=myServo, angle=myAngle)
+		#print('runtime : '+str(timeit.default_timer() - start))
 
 main()
