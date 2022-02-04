@@ -70,4 +70,4 @@ def debug():
         #print(img.shape)
         myAngle = retrieve_angle(s1=60, hd=5, img_path=img, frame=frame1)
         print('runtime : '+str(timeit.default_timer() - start))
-debug()
+main()

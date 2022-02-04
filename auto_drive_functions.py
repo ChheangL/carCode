@@ -38,7 +38,7 @@ def perform_3sig(data,s1,hd):
 def retrieve_angle(s1,hd,img_path,frame):
     data = frame.get_data(img_path,1) #remove coordinate
     edges = perform_3sig(data,s1,hd)
-    print(edges)
+    #print(edges)
     points = np.empty((0,2),float)
     #print(points)
     for key in edges.keys():
