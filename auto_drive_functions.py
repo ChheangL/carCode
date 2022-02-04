@@ -27,17 +27,18 @@ def perform_3sig(data,s1,hd):
         detect = ef(s1,hd,data['L'+str(num)])
         index_edg = detect.abnormal
         if not np.isnan(index_edg): 
-            edges['L'+str(num)] = index_edg
-            detect = ef(s1,hd,data['L'+str((size+1-num))])
-            index_edg = detect.abnormal
-            edges['L'+str((size+1-num))] = index_edg
+            detect2 = ef(s1,hd,data['L'+str((size+1-num))])
+            index_edg2 = detect2.abnormal
+            if not np.isnan(index_edg2):
+                edges['L'+str(num)] = index_edg
+                edges['L'+str((size+1-num))] = index_edg2
         if len(edges.keys()) >= 4 : break 
     return edges
 
 def retrieve_angle(s1,hd,img_path,frame):
     data = frame.get_data(img_path,1) #remove coordinate
     edges = perform_3sig(data,s1,hd)
-    #print(edges)
+    print(edges)
     points = np.empty((0,2),float)
     #print(points)
     for key in edges.keys():

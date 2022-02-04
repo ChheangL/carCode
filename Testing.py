@@ -62,4 +62,12 @@ def main():
 		servo_begin(servo=myServo, angle=myAngle)
 		print('runtime : '+str(timeit.default_timer() - start))
 
-main()
+def debug():
+    while True:
+        start = timeit.default_timer()
+        img = cam.read()[1]
+        #cv2.imwrite('~/Desktop/testimage/img'+str(x)+'.jpg', img)
+        #print(img.shape)
+        myAngle = retrieve_angle(s1=60, hd=5, img_path=img, frame=frame1)
+        print('runtime : '+str(timeit.default_timer() - start))
+debug()
