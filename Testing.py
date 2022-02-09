@@ -43,7 +43,7 @@ def main():
 		x=x+1
 		
 		#print(img.shape)
-		myAngle = retrieve_angle(s1=60, hd=5, img_path=img, frame=frame1)
+		myAngle = retrieve_angle(s1=100, hd=5, img_path=img, frame=frame1)
 		print(myAngle.shape)
 		
 		if myAngle.shape > (1,):
