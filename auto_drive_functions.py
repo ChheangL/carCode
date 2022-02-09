@@ -21,19 +21,50 @@ def mid_angle(data,width,height):
     return values
 
 def perform_3sig(data,s1,hd):
+    """version 3 : prioritize in the case of detecting one side
+        If one side detect edge and other not : note to one side case (one_side += 1)
+        If the next detect edge on both side : note to two side case (two_side += 1)
+        
+        for one side, need to detect on everyline unless two side case detected in ## consequtive time.
+        that mean if two_side == ##(to be determind), then one_side case will be ignore 
+    """
     edges = {}
+    right_point = {}
+    left_point = {}
     size = len(data.keys())
+    one_side_left = 0
+    one_side_right = 0
+    two_side = 0
+    num = 2 # the number for two side case to constitude the result
     for num in range(1,int(size/2+1)):
+        #check the left side
         detect = ef(s1,hd,data['L'+str(num)])
         index_edg = detect.abnormal
-        if not np.isnan(index_edg): 
-            detect2 = ef(s1,hd,data['L'+str((size+1-num))])
-            index_edg2 = detect2.abnormal
-            if not np.isnan(index_edg2):
-                edges['L'+str(num)] = index_edg
-                edges['L'+str((size+1-num))] = index_edg2
+        detect2 = ef(s1,hd,data['L'+str((size+1-num))])
+        index_edg2 = detect2.abnormal
+        if np.isnan(index_edg) and not np.isnan(index_edg2):
+            one_side_right = one_side_left+ 1
+            right_point['L'+str(num)] = index_edg
+            edges = {}
+        elif np.isnan(index_edg2) and not np.isnan(index_edg):
+            one_side_left = one_side_left + 1
+            left_point['L'+str((size+1-num))] = index_edg2            
+            edges = {}
+        elif not np.isnan(index_edg) and not np.isnan(index_edg): # found an edge on left side 
+            edges['L'+str(num)] = index_edg
+            edges['L'+str((size+1-num))] = index_edg2
+            two_side = two_side + 1  
+            
         if len(edges.keys()) >= 4 : break 
-    return edges
+    if len(edges.keys())>=4 : return edges
+    if one_side_left > one_side_right : 
+        left_point['side'] = 0 #indicating the left
+        return left_point
+    elif one_side_left < one_side_right :
+        right_point['side'] = 1 #indicating the right        
+        return right_point
+    else:
+        return np.NaN
 
 def retrieve_angle(s1,hd,img_path,frame):
     data = frame.get_data(img_path, 1) #remove coordinate

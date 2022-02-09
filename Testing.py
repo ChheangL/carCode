@@ -44,7 +44,7 @@ def main():
 		x=x+1
 		
 		points, mid_points, myAngle = retrieve_angle(s1=60, hd=5, img_path=img, frame=frame1)
-        debugging(img, myAngle, points, mid_points)
+		debugging(img, myAngle, points, mid_points)
 		
 		if myAngle.shape > (1,):
 			if math.isnan(myAngle[1]) : continue
@@ -70,4 +70,4 @@ def main():
 #         #print(img.shape)
 #         myAngle = retrieve_angle(s1=60, hd=5, img_path=img, frame=frame1)
 #         print('runtime : '+str(timeit.default_timer() - start))
-# debug()
+main()
