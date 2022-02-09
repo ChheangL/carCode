@@ -1,13 +1,14 @@
 from auto_drive_functions import retrieve_angle
 from ImageFrame import Frame
+from debug_mode import debugging
 from gpiozero import Servo, Motor
 from time import sleep
 import cv2
 import numpy as np
 import math
 import timeit
-frame1 = Frame(640,480,10)
 
+frame1 = Frame(640,480,10)
 cam = cv2.VideoCapture(0)
 
 #init servo
@@ -42,9 +43,8 @@ def main():
 		#cv2.imwrite('~/Desktop/testimage/img'+str(x)+'.jpg', img)
 		x=x+1
 		
-		#print(img.shape)
-		myAngle = retrieve_angle(s1=60, hd=5, img_path=img, frame=frame1)
-		print(myAngle.shape)
+		points, mid_points, myAngle = retrieve_angle(s1=60, hd=5, img_path=img, frame=frame1)
+        debugging(img, myAngle, points, mid_points)
 		
 		if myAngle.shape > (1,):
 			if math.isnan(myAngle[1]) : continue
@@ -60,14 +60,14 @@ def main():
 			motor.forward(0.25)
 		
 		servo_begin(servo=myServo, angle=myAngle)
-		print('runtime : '+str(timeit.default_timer() - start))
+# 		print('runtime : '+str(timeit.default_timer() - start))
 
-def debug():
-    while True:
-        start = timeit.default_timer()
-        img = cam.read()[1]
-        #cv2.imwrite('~/Desktop/testimage/img'+str(x)+'.jpg', img)
-        #print(img.shape)
-        myAngle = retrieve_angle(s1=60, hd=5, img_path=img, frame=frame1)
-        print('runtime : '+str(timeit.default_timer() - start))
-debug()
+# def debug():
+#     while True:
+#         start = timeit.default_timer()
+#         img = cam.read()[1]
+#         #cv2.imwrite('~/Desktop/testimage/img'+str(x)+'.jpg', img)
+#         #print(img.shape)
+#         myAngle = retrieve_angle(s1=60, hd=5, img_path=img, frame=frame1)
+#         print('runtime : '+str(timeit.default_timer() - start))
+# debug()
