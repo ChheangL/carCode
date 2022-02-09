@@ -8,7 +8,8 @@ import numpy as np
 
 def debugging(img, angle, points=None, mid_points=None):
     print("======================== Debug Mode ==============================")
-    width, height = img.size
+    print(type(img))
+    width, height =[640,480]
     
     start_time = ti.default_timer()
     end_time = ti.default_timer()
@@ -22,7 +23,7 @@ def debugging(img, angle, points=None, mid_points=None):
     img_as_np = np.array(img)
 
     # Change color of Image
-    img_as_np = img_as_np[:,:,2]
+    img_as_np = img_as_np[:,:,0]
 
     # Show Changed Image as Background
     plt.imshow(img_as_np)
@@ -30,10 +31,13 @@ def debugging(img, angle, points=None, mid_points=None):
     # Plot points as red dot
     for x, y in points:
         plt.plot(x, y, 'ro')
+    
+    for x, y, a in mid_points:
+        plt.plot(x, y, 'b^')
 
     # Save figure to file
-    plt.savefig("foo", format='png')
+    plt.savefig("foo.png", format='png')
 
     # Display Image from file
     new_img = Image.open("foo.png")
-    ImageShow.show(new_img.rotate(angle=180, expand=True))
+    ImageShow.show(new_img)
