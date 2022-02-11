@@ -46,7 +46,7 @@ class Frame:
    
     def get_data(self,img,D):
         img = np.array(img)
-        img = img[:,:,0]
+        img = img[:,:,2]
         #img = 255.0*(img/255.0)**6
         #self.plot_all_line('k')
         #imshow(img)

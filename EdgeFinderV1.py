@@ -14,7 +14,7 @@ class EdgeFinder :
            return(list)       get_3sigmaBound(self,data_seg) : for getting the boundary in the interval
            return(dictionary) check_abnormal(self,init) : perform checking for the hd interval
            return(dictionary) perform_3sig(self) : perform the 3 sigma method for the entier data set
-           return(void)       plot_data(self) : ploting the data on the graph
+           return(void)       plot_data(self) : ploting the data on the gra
     """
     def __init__(self,s1,hd,Data,sense = 2):
         self.data = Data
@@ -33,27 +33,26 @@ class EdgeFinder :
     
     #the function that do the stuff above
     def check_abnormal(self,init):
-        states=0 #empty dictionary discribing the current interveral data
+        states={} #empty dictionary discribing the current interveral data
         end=init+self.s1 #a stop for the s1 interval
-        states = end #start checking at that posision of data
+        states['num'] = end #start checking at that posision of data
 
         #get the upperbound and lowerbound of the data
-        upper,lower = self.get_3sigmaBound(self.data[init : end])
+        states['up'],states['low'] = self.get_3sigmaBound(self.data[init : end])
 
         #loop and check for abnormal data with upper and lower bound
         for Data in self.data[end:end+self.hd]:
             #if found abnormal, return the dictionary
-            if Data >= upper or Data <= lower: return states
-            states += 1
+            if Data >= states['up'] or Data <= states['low']: return states
+            states['num'] += 1
         #loop is done, and num is noted at Nan
-        states = np.NaN
+        states['num'] = np.NaN
         return states
 
     def perform_3sig(self):
         init = 0 #act as the starting position for the operation
-        #result = {'up':[],'low':[]} #empty dictionary for result appending
-        result = {}
-        x=0
+        result = {'up':[],'low':[]} #empty dictionary for result appending
+        x = 0
         while True:
             #limter for operation going over the data value
             if init+self.s1+self.hd >= len(self.data) : 
@@ -61,19 +60,32 @@ class EdgeFinder :
                 break
             #call in the operation to check the abnormal value
             states = self.check_abnormal(init)
-            #result['low'].append(states['low']) # append everything to the result
-            #result['up'].append(states['up'])
+            result['low'].append(states['low']) # append everything to the result
+            result['up'].append(states['up'])
             #check if the data found a abnormal. if so, the operation terminate
-            if np.isnan(states) and x>0:
-                x = 0
-            elif not np.isnan(states) : 
-                x = x+1
-            if not np.isnan(states) and x == self.sense:
-                result['num'] = states
+            if np.isnan(states['num']) and x>0:
+                x =0
+            elif not np.isnan(states['num']) : 
+                x =x+1
+            if not np.isnan(states['num']) and x==self.sense:
+                result['num'] = states['num']
                 break
             #move to next hd
             init += self.hd 
         self.abnormal = result
         return result
      
-    
+    def plot_data(self,lines = ''):
+        plt.plot(self.data,'r.')
+        if lines != '' : plt.title((lines+'(S1='+str(self.s1)+' ,hd='+str(self.hd)+')'))
+        for interation in range(0,len(self.abnormal['low'])):
+            i1 = interation*(self.hd)  
+            e1 = self.s1+self.hd*interation
+            i2 = e1
+            e2 = self.s1+self.hd*interation+self.hd
+            plt.plot(range(i1,e1),np.full(shape=self.s1,fill_value = self.abnormal['low'][interation]),'m',)
+            plt.plot(range(i2,e2),np.full(shape=self.hd,fill_value = self.abnormal['low'][interation]),'k',)
+            plt.plot(range(i1,e1),np.full(shape=self.s1,fill_value = self.abnormal['up'][interation]),'m')
+            plt.plot(range(i2,e2),np.full(shape=self.hd,fill_value = self.abnormal['up'][interation]),'k')
+        if not np.isnan(self.abnormal['num']) : plt.plot([self.abnormal['num']],self.data[self.abnormal['num']],'bo',)
+        plt.show()

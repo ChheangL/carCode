@@ -20,7 +20,7 @@ def mid_angle(data,width,height):
         values = np.append(values,[np.append(mid,[angle])],axis=0)
     return values
 
-def perform_3sigV3(data,s1,hd):
+def perform_3sigV3(data,s1,hd,sense = 2):
     """version 3 : prioritize in the case of detecting one side
         If one side detect edge and other not : note to one side case (one_side += 1)
         If the next detect edge on both side : note to two side case (two_side += 1)
@@ -38,21 +38,20 @@ def perform_3sigV3(data,s1,hd):
     num = 2 # the number for two side case to constitude the result
     for num in range(1,int(size/2+1)):
         #check the left side
-        detect = ef(s1,hd,data['L'+str(num)])
-        index_edg = detect.abnormal
+        detect = ef(s1,hd,data['L'+str(num)],sense)
+        index_edg = detect.abnormal['num']
         print(index_edg)
-        detect2 = ef(s1,hd,data['L'+str((size+1-num))])
-        index_edg2 = detect2.abnormal
+        detect2 = ef(s1,hd,data['L'+str((size+1-num))],sense)
+        index_edg2 = detect2.abnormal['num']
         print(index_edg2)
         if np.isnan(index_edg) and not np.isnan(index_edg2):
-            one_side_right = one_side_left+ 1
-
-            right_point['L'+str(num)] = index_edg2
+            one_side_right = one_side_right+ 1
+            right_point['L'+str((size+1-num))] = index_edg2
             edges = {}
         elif np.isnan(index_edg2) and not np.isnan(index_edg):
             one_side_left = one_side_left + 1
 
-            left_point['L'+str((size+1-num))] = index_edg            
+            left_point['L'+str(num)] = index_edg            
             edges = {}
         elif not np.isnan(index_edg) and not np.isnan(index_edg): # found an edge on left side 
             edges['L'+str(num)] = index_edg
@@ -61,6 +60,11 @@ def perform_3sigV3(data,s1,hd):
             
 
         if len(edges.keys()) >= 4 or one_side_left >=4 or one_side_right >=4 : break 
+    print(edges)
+    print(left_point)
+    print(one_side_left)
+    print(right_point)
+    print(one_side_right)
     if len(edges.keys())>=4 : return edges
     if one_side_left >= one_side_right : 
         left_point['side'] = 0 #indicating the left
@@ -76,37 +80,38 @@ def perform_3sig(data,s1,hd):
     size = len(data.keys())
     for num in range(1,int(size/2+1)):
         detect = ef(s1,hd,data['L'+str(num)])
-        index_edg = detect.abnormal
-        if not np.isnan(index_edg): 
-            detect2 = ef(s1,hd,data['L'+str((size+1-num))])
-            index_edg2 = detect2.abnormal
-            if not np.isnan(index_edg2):
-                edges['L'+str(num)] = index_edg
-                edges['L'+str((size+1-num))] = index_edg2
-        if len(edges.keys()) >= 4 : break 
+        index_edg = detect.abnormal['num']
+        print(index_edg)
+        detect2 = ef(s1,hd,data['L'+str((size+1-num))])
+        index_edg2 = detect2.abnormal['num']
+        print(index_edg2)
+        edges['L'+str(num)] = index_edg
+        edges['L'+str((size+1-num))] = index_edg2
+        #if len(edges.keys()) >= 4 : break 
     return edges  
 
-def retrieve_angle(s1,hd,img_path,frame):
+def retrieve_angle(s1,hd,img_path,frame,sense = 2):
 
     data = frame.get_data(img_path, 1) #remove coordinate
 #     print("data: ", data)
     
-    edges = perform_3sigV3(data, s1, hd)
+    edges = perform_3sigV3(data, s1, hd,sense)
     print("edges: ", edges)
 #     print("==========================================================")
     
     points = np.empty((0,2), float)
-    if 'side' in edges.keys():
-        if edges['side']==0 : return np.array([45,45])
-        if edges['side']==1 : return np.array([135,135])
+    
     for key in edges.keys():
+        if key == 'side' : break
         if not np.isnan(edges[key]):
             temp = np.flip(frame.lines_frame[key],axis=0)
             cord = temp[edges[key]]
 #             print('\nfound!')
 #             print("cord: ", cord)
-        points = np.append(points, [cord], axis=0)
-        
+            points = np.append(points, [cord], axis=0)
+    if 'side' in edges.keys():
+        if edges['side']==0 : return points,np.NaN,np.array([45,45])
+        if edges['side']==1 : return points,np.NaN,np.array([135,135])
     print("\npoints: \n", points)
         
     mid_points = mid_angle(data=points, width=frame.width, height=frame.height)
