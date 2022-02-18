@@ -44,9 +44,9 @@ class Frame:
                 print('Done!')
             
    
-    def get_data(self,img,D):
+    def get_data(self,img,layer=np.NaN):
         img = np.array(img)
-        img = img[:,:,2]
+        if not np.isnan(layer) : img = img[:,:,layer]
         #img = 255.0*(img/255.0)**6
         #self.plot_all_line('k')
         #imshow(img)
@@ -64,11 +64,11 @@ class Frame:
     #save lines_frame to cvs as 'frame.cvs'
 
     def serilization(self):
-        with open((str(self.width)+'x'+str(self.height)+'_'+str(self.angle)+'frame.pkl'), 'wb') as f:
+        with open(('Frame/'+str(self.width)+'x'+str(self.height)+'_'+str(self.angle)+'frame.pkl'), 'wb') as f:
             pk.dump(self, f)
             
     def unserilize(self):
-        with open((str(self.width)+'x'+str(self.height)+'_'+str(self.angle)+'frame.pkl'), 'rb') as f:
+        with open(('Frame/'+str(self.width)+'x'+str(self.height)+'_'+str(self.angle)+'frame.pkl'), 'rb') as f:
             print('load CVS file successfully')
             return pk.load(f)
         

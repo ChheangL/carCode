@@ -16,7 +16,7 @@ class EdgeFinder :
            return(dictionary) perform_3sig(self) : perform the 3 sigma method for the entier data set
            return(void)       plot_data(self) : ploting the data on the gra
     """
-    def __init__(self,s1,hd,Data,sense = 2):
+    def __init__(self,s1,hd,Data,sense = 1):
         self.data = Data
         self.s1 = s1
         self.hd = hd
