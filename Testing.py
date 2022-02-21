@@ -36,7 +36,7 @@ def main():
     while True:
     start = timeit.default_timer()
     img = cam.read()[1]    
-    points, mid_points, myAngle = retrieve_angle(s1=100, hd=3, img_path=img, frame=frame1)
+    points, mid_points, myAngle = retrieve_angle(s1=100, hd=3,layer = 2,img_path=img, frame=frame1)
     #debugging(img, myAngle, points, mid_points)
     if myAngle.shape > (1,):
         if math.isnan(myAngle[1]) : continue
@@ -46,7 +46,7 @@ def main():
     
     if myAngle <= 80 or myAngle >= 100 :
         print('slow')
-        motor.forward(0.25)
+        motor.forward(0.15)
     else:
         print('fast')
         motor.forward(0.25)
