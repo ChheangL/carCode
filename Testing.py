@@ -34,24 +34,24 @@ def servo_begin(servo, angle):
 
 def main():
     while True:
-    start = timeit.default_timer()
-    img = cam.read()[1]    
-    points, mid_points, myAngle = retrieve_angle(s1=100, hd=3,layer = 2,img_path=img, frame=frame1)
-    #debugging(img, myAngle, points, mid_points)
-    if myAngle.shape > (1,):
-        if math.isnan(myAngle[1]) : continue
-        myAngle = myAngle[1]
-    else:
-        myAngle = 90
-    
-    if myAngle <= 80 or myAngle >= 100 :
-        print('slow')
-        motor.forward(0.15)
-    else:
-        print('fast')
-        motor.forward(0.25)
-    
-    servo_begin(servo=myServo, angle=myAngle)
+        start = timeit.default_timer()
+        img = cam.read()[1]    
+        points, mid_points, myAngle = retrieve_angle(s1=100, hd=3,layer = 2,img_path=img, frame=frame1)
+        #debugging(img, myAngle, points, mid_points)
+        if myAngle.shape > (1,):
+            if math.isnan(myAngle[1]) : continue
+            myAngle = myAngle[1]
+        else:
+            myAngle = 90
+        
+        if myAngle <= 80 or myAngle >= 100 :
+            print('slow')
+            motor.forward(0.15)
+        else:
+            print('fast')
+            motor.forward(0.25)
+        
+        servo_begin(servo=myServo, angle=myAngle)
 
 def debug():
      while True:
