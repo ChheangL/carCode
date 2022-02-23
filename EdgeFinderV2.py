@@ -14,13 +14,13 @@ class EdgeFinder :
            return(list)       get_3sigmaBound(self,data_seg) : for getting the boundary in the interval
            return(dictionary) check_abnormal(self,init) : perform checking for the hd interval
            return(dictionary) perform_3sig(self) : perform the 3 sigma method for the entier data set
-           return(void)       plot_data(self) : ploting the data on the gra
+           return(void)       plot_data(self) : ploting the data on the graph
     """
-    def __init__(self,s1,h1,hd,Data,sense = 1):
+    def __init__(self,s1,move,hd,Data,sense = 2):
         self.data = Data
         self.s1 = s1
         self.hd = hd
-        self.h1 = h1
+        self.move = move
         self.sense = sense
         self.perform_3sig()
         
@@ -28,37 +28,40 @@ class EdgeFinder :
     def get_3sigmaBound(self,data):
         mean = np.mean(data)
         standard_div = np.std(data)
-        upperbound = mean + 3*standard_div
-        lowerbound = mean - 3*standard_div
-        return [upperbound, lowerbound]
+        return [mean, standard_div*3]
     
     #the function that do the stuff above
     def check_abnormal(self,init):
-        states={} #empty dictionary discribing the current interveral data
+        states=0 #empty dictionary discribing the current interveral data
         end=init+self.s1 #a stop for the s1 interval
-        states['num'] = end #start checking at that posision of data
+        states = end #start checking at that posision of data
         x=0
         #get the upperbound and lowerbound of the data
-        states['up'],states['low'] = self.get_3sigmaBound(self.data[init : end])
-
+        mean,Three_standard_div = self.get_3sigmaBound(self.data[init : end])
         #loop and check for abnormal data with upper and lower bound
         for Data in self.data[end:end+self.hd]:
             #if found abnormal, return the dictionary
-            if Data >= states['up'] or Data <= states['low']: 
+            Data = np.abs([Data-mean])
+            self.num = np.append(self.num,[[Data[0],Three_standard_div]],axis=0)
+            print(self.num)
+            if Data >= Three_standard_div: 
                 if x >= self.sense:
                     return states
                 else:
                     x = x+1
             elif x > 0:
                 x = 0
-            states['num'] += 1
+            states += 1
         #loop is done, and num is noted at Nan
-        states['num'] = np.NaN
+        states = np.NaN
         return states
 
     def perform_3sig(self):
         init = 0 #act as the starting position for the operation
-        result = {'up':[],'low':[]} #empty dictionary for result appending
+        #result = {'up':[],'low':[]} #empty dictionary for result appending
+        result = {}
+        x=0
+        self.num = np.empty((0,2),float)
         while True:
             #limter for operation going over the data value
             if init+self.s1+self.hd >= len(self.data) : 
@@ -66,28 +69,19 @@ class EdgeFinder :
                 break
             #call in the operation to check the abnormal value
             states = self.check_abnormal(init)
-            result['low'].append(states['low']) # append everything to the result
-            result['up'].append(states['up'])
+            #result['low'].append(states['low']) # append everything to the result
+            #result['up'].append(states['up'])
             #check if the data found a abnormal. if so, the operation terminate
-            if not np.isnan(states['num']):
-                result['num'] = states['num']
+            #if np.isnan(states) and x>0:
+            #    x = 0
+            #elif not np.isnan(states) : 
+            #    x = x+1
+            if not np.isnan(states) : #and x == self.sense:
+                result['num'] = states
                 break
             #move to next hd
-            init += self.h1 
+            init += self.move 
         self.abnormal = result
         return result
      
-    def plot_data(self,lines = ''):
-        plt.plot(self.data,'r.')
-        if lines != '' : plt.title((lines+'(S1='+str(self.s1)+' ,hd='+str(self.hd)+')'))
-        for interation in range(0,len(self.abnormal['low'])):
-            i1 = interation*(self.h1)  
-            e1 = self.s1+self.h1*interation
-            i2 = e1
-            e2 = self.s1+self.h1*interation+self.hd
-            plt.plot(range(i1,e1),np.full(shape=self.s1,fill_value = self.abnormal['low'][interation]),'m',)
-            plt.plot(range(i2,e2),np.full(shape=self.hd,fill_value = self.abnormal['low'][interation]),'k',)
-            plt.plot(range(i1,e1),np.full(shape=self.s1,fill_value = self.abnormal['up'][interation]),'m')
-            plt.plot(range(i2,e2),np.full(shape=self.hd,fill_value = self.abnormal['up'][interation]),'k')
-        if not np.isnan(self.abnormal['num']) : plt.plot([self.abnormal['num']],self.data[self.abnormal['num']],'bo',)
-        plt.show()
+    

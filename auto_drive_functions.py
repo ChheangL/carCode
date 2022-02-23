@@ -1,7 +1,5 @@
 import numpy as np
 import math
-
-from sympy import N
 from ImageFrame import Frame
 from EdgeFinder import EdgeFinder as ef
 
@@ -22,7 +20,7 @@ def mid_angle(data,width,height):
         values = np.append(values,[np.append(mid,[angle])],axis=0)
     return values
 
-def perform_3sigV3(data,s1,hd,sense):
+def perform_3sigV3(data,s1,h1,hd,sense):
     """version 3 : prioritize in the case of detecting one side
         If one side detect edge and other not : note to one side case (one_side += 1)
         If the next detect edge on both side : note to two side case (two_side += 1)
@@ -40,10 +38,10 @@ def perform_3sigV3(data,s1,hd,sense):
     num = 2 # the number for two side case to constitude the result
     for num in range(1,int(size/2+1)):
         #check the left side
-        detect = ef(s1,hd,data['L'+str(num)],sense)
+        detect = ef(s1,h1,hd,data['L'+str(num)],sense)
         index_edg = detect.abnormal['num']
         #print(index_edg)
-        detect2 = ef(s1,hd,data['L'+str((size+1-num))],sense)
+        detect2 = ef(s1,h1,hd,data['L'+str((size+1-num))],sense)
         index_edg2 = detect2.abnormal['num']
         #print(index_edg2)
         if np.isnan(index_edg) and not np.isnan(index_edg2):
@@ -77,14 +75,14 @@ def perform_3sigV3(data,s1,hd,sense):
     else:
         return np.NaN
 
-def perform_3sig(data,s1,hd):
+def perform_3sig(data,s1,h1,hd,sense):
     edges = {}
     size = len(data.keys())
     for num in range(1,int(size/2+1)):
-        detect = ef(s1,hd,data['L'+str(num)])
+        detect = ef(s1,h1,hd,data['L'+str(num)],sense)
         index_edg = detect.abnormal['num']
         #print(index_edg)
-        detect2 = ef(s1,hd,data['L'+str((size+1-num))])
+        detect2 = ef(s1,h1,hd,data['L'+str((size+1-num))],sense)
         index_edg2 = detect2.abnormal['num']
         #print(index_edg2)
         edges['L'+str(num)] = index_edg
@@ -92,11 +90,12 @@ def perform_3sig(data,s1,hd):
         #if len(edges.keys()) >= 4 : break 
     return edges  
 
-def retrieve_angle(s1,hd,layer,img_path,frame,sense = 1):
+def retrieve_angle(s1,h1,hd,layer,img_path,frame,sense = 1):
 
     data = frame.get_data(img_path,layer) #remove coordinate    
-    edges = perform_3sigV3(data, s1, hd,sense)
-    #print("edges: ", edges)  
+    #print(data)
+    edges = perform_3sigV3(data, s1,h1, hd,sense)
+    print("edges: ", edges)  
     points = np.empty((0,2), float)   
     for key in edges.keys():
         if key == 'side' : break
@@ -134,7 +133,7 @@ def vector_check(points):
         sin_theta = D/(norm1*norm2)
         print(sin_theta)
         #print(sin_theta)
-        if sin_theta <= 0.4 and sin_theta >= -0.4 : 
+        if sin_theta <= 0.1 and sin_theta >= -0.1 : 
             if (vector1[1] > 0 and vector1[0] > 0) or (vector1[0] <0 and vector1[1]<0):
                 return 'left'
             else:

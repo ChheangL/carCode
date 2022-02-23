@@ -20,7 +20,7 @@ class Frame:
                 for line in range(1,int(180/theta)):    
                     rotated = np.matmul(R,rotated) #rotate (x -> x')
                     #check for pixel around that line
-                    if rotated[1]<0.2 and rotated[1]>-0.2:
+                    if rotated[1]<0.1 and rotated[1]>-0.1:
                         B = np.array(((c, s), (-s, c))) #the rotating matrix  (x' -> x)
                         for num in range(0,line):
                             rotated = np.matmul(B,rotated) #rotate back (x' -> x)
