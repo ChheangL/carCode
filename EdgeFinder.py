@@ -58,7 +58,6 @@ class EdgeFinder :
 
     def perform_3sig(self):
         init = 0 #act as the starting position for the operation
-        #result = {'up':[],'low':[]} #empty dictionary for result appending
         result = {}
         while True:
             #limter for operation going over the data value
@@ -67,14 +66,10 @@ class EdgeFinder :
                 break
             #call in the operation to check the abnormal value
             states = self.check_abnormal(init)
-            #result['low'].append(states['low']) # append everything to the result
-            #result['up'].append(states['up'])
-            #check if the data found a abnormal. if so, the operation terminate
-            
             if not np.isnan(states):
                 result['num'] = states
                 break
-            #move to next hd
+            #move to next h1
             init += self.h1
         self.abnormal = result
         return result
