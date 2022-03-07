@@ -1,4 +1,3 @@
-from unittest import TestCase
 from matplotlib.pyplot import axis
 import numpy as np
 import pickle as pk
@@ -24,9 +23,9 @@ class Frame:
                     ll = np.append(ll,[[int(width/2-iter-1),height-jter+1-1]],axis=0)
                     break
                 else:
-                    if jter==height-1:
-                        lr = np.append(lr,[[int(width/2+iter-1),lr[iter-1,1]]],axis=0)
-                        ll = np.append(ll,[[int(width/2-iter-1),ll[iter-1,1]]],axis=0)
+                    if jter==height-1: continue
+                    lr = np.append(lr,[[int(width/2+iter-1),lr[iter-1,1]]],axis=0)
+                    ll = np.append(ll,[[int(width/2-iter-1),ll[iter-1,1]]],axis=0)
         return lr,ll
 
     def __init__(self, width, height, angle):
@@ -61,10 +60,13 @@ class Frame:
         #imshow(img)
         lines = {}
         for key in self.lines_frame.keys():
+            count = 0
             temp2 = np.empty((0,1),float)
-            for cord in self.lines_frame[key]:  
+            for cord in self.lines_frame[key]:
+                #print(lines[key][count])
                 temp1 = img[int(cord[1]),int(cord[0])]
                 temp2 = np.append(temp2,[temp1])
+                count+=1
             lines[key] = temp2
         return lines
     #save lines_frame to cvs as 'frame.cvs'

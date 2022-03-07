@@ -78,7 +78,7 @@ class EdgeFinder :
         return result
      
     def plot_data(self,lines = ''):
-        plt.plot(self.data,'r.')
+        plt.plot(self.data,'b:')
         if lines != '' : plt.title((lines+'(S1='+str(self.s1)+' ,hd='+str(self.hd)+')'))
         for interation in range(0,len(self.abnormal['low'])):
             i1 = interation*(self.h1)  

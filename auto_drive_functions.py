@@ -78,7 +78,7 @@ def perform_3sigV3(data,s1,h1,hd,sense):
 def perform_3sig(data,s1,h1,hd,sense):
     edges = {}
     size = len(data.keys())
-    for num in range(1,int(size/2+1)):
+    for num in range(1,int(size/2)):
         detect = ef(s1,h1,hd,data['L'+str(num)],sense)
         index_edg = detect.abnormal['num']
         #print(index_edg)
