@@ -37,7 +37,7 @@ def main():
         start = timeit.default_timer()
         img = cam.read()[1]   
         try:
-            imgLength = len(img)
+            print(len(img))
         except:
             print("Cam Not Found Bra")
             break
