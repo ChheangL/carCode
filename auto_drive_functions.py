@@ -13,7 +13,6 @@ def mid_angle(data,width,height):
             tan = (mid[1]-height)/(mid[0]-(width/2.))
             angle_radiant = math.atan(tan)
             angle_degree = math.degrees(angle_radiant)
-            #print(angle_degree)
             angle = ((-1)*angle_degree if angle_degree < 0 else 180-angle_degree)
         else :
             angle = 90.0
@@ -22,24 +21,21 @@ def mid_angle(data,width,height):
 
 def retrieve_angle(s1,h1,hd,layer,img_path,frame):
 
-    data = frame.get_data(img_path,layer) #remove coordinate    
-    #print(data)
-    edges = ef(data, s1,h1, hd)
-    points = np.empty((0,2), float)   
-    for key in edges.keys():
-        if key == 'side' : break
-        if not np.isnan(edges[key]):
-            temp = np.flip(frame.lines_frame[key],axis=0)
-            cord = temp[edges[key]]
-            points = np.append(points, [cord], axis=0)
-    if len(edges.keys()) <= 1: return points,np.NaN,np.array([90,90])
-    if 'side' in edges.keys():
-        if edges['side']==0 : return points,np.NaN,np.array([135,135])
-        if edges['side']==1 : return points,np.NaN,np.array([45,45])
+    data = frame.get_data(img_path,layer) #select the data    
+    edges = ef(s1,h1, hd,data) #calculate the Boundary
+    #reducing only pair points
+    points = np.empty([0,2],int)
+    for i in range(0,4,2):
+        if edges.BND[i] != 0 and edges.BND[i+1]!=0 : 
+            points= np.append(points,[frame.fline[str(i+1)][int(edges.BND[i])]],axis=0)
+            points= np.append(points,[frame.fline[str(i+2)][int(edges.BND[i+1])]],axis=0)
+    if len(points) == 0:
+        points = points = np.array([frame.fline[key][int(edges.BND[int(key)-1])] for key in frame.fline.keys() if edges.BND[int(key)-1]!=0])[0:4]
     check = vector_check(points)
-    if check == 'right': return points,np.NaN,np.array([45,45])
-    if check == 'left': return points,np.NaN,np.array([135,135])
-        
+    if len(points) == 0: return points,np.array([90,90]),np.array([90,90])  
+    check = vector_check(points)
+    if check == 'left': return points,np.array([135,135]),np.array([135,135])
+    if check == 'right': return points,np.array([45,45]),np.array([45,45])
     mid_points = mid_angle(data=points, width=frame.width, height=frame.height)
     return points, mid_points, mid_points[:,2] 
 
@@ -49,16 +45,10 @@ def vector_check(points):
         vector2 = points[3]-points[1]
         norm1 = np.linalg.norm(vector1)
         norm2 = np.linalg.norm(vector2)
-        #print(str(norm1)+', '+str(norm2))
-        abs_A = math.sqrt(vector1[0]**2 + vector1[1]**2)
-        abs_B = math.sqrt(vector2[0]**2 + vector2[1]**2)
-        #print(str(abs_A)+', '+str(abs_B))
-        #print(vector1)
-        #print(vector2)
+        #abs_A = math.sqrt(vector1[0]**2 + vector1[1]**2) # The code here just to show that it is the same as norm function
+        #abs_B = math.sqrt(vector2[0]**2 + vector2[1]**2) #
         D = np.linalg.det([vector2,vector1])
         sin_theta = D/(norm1*norm2)
-        print(sin_theta)
-        #print(sin_theta)
         if sin_theta <= 0.1 and sin_theta >= -0.1 : 
             if (vector1[1] > 0 and vector1[0] > 0) or (vector1[0] <0 and vector1[1]<0):
                 return 'left'
