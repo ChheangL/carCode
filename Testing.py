@@ -11,7 +11,7 @@ from hardwareControl import *
 
 frame1 = Frame(640,480,10)
 cam = cv2.VideoCapture(0)
-#Device.pin_facotry = PiGPIOFactory()
+Device.pin_facotry = PiGPIOFactory()
 #print('pinnnnnnn: ',Device.pin_facotry )
 #init servo
 gpioPin = 4
