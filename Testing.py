@@ -17,8 +17,8 @@ gpioPin = 4
 #correction = 0.45
 #maxPW = (2.0 + correction) / 1000
 #minPW = (1.0 - correction) / 1000
-maxpw = pulse_width(duty_cycle=1)
-minpw = pulse_width(duty_cycle=99)
+maxpw = pulse_width(duty_cycle=99)
+minpw = pulse_width(duty_cycle=1)
 myServo = Servo(gpioPin, min_pulse_width=minpw, max_pulse_width=maxpw)
 
 #init motor
