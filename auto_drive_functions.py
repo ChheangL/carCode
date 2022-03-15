@@ -32,7 +32,7 @@ def retrieve_angle(s1,h1,hd,layer,img_path,frame):
     if len(points) == 0:
         points = points = np.array([frame.fline[key][int(edges.BND[int(key)-1])] for key in frame.fline.keys() if edges.BND[int(key)-1]!=0])[0:4]
     print(points,len(points))
-    if len(points) < 4: return np.NaN,np.NaN,np.NaN 
+    if len(points) < 4: return np.NaN,np.NaN,np.array([np.NaN]) 
     check = vector_check(points)
     if check == 'left': return points,np.array([135,135]),np.array([135,135])
     if check == 'right': return points,np.array([45,45]),np.array([45,45])

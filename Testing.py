@@ -1,7 +1,8 @@
 from auto_drive_functions import retrieve_angle
 from ImageFrame import Frame
 #from debug_mode import debugging
-from gpiozero import Servo, Motor
+from gpiozero import Servo, Motor,Device
+from gpiozero.pins.pigpio import PiGPIOFactory
 from time import sleep
 import cv2
 import numpy as np
@@ -10,7 +11,7 @@ import timeit
 
 frame1 = Frame(640,480,10)
 cam = cv2.VideoCapture(0)
-
+Device.pin_facotry = PiGPIOFactory()
 #init servo
 gpioPin = 4
 correction = 0.45
@@ -43,10 +44,10 @@ def main():
             break
         myAngle = retrieve_angle(s1=70,h1=3, hd=10,layer = 2,img_path=img, frame=frame1)[2]
         #debugging(img, myAngle, points, mid_points)
-        if myAngle.shape > (1,):
+        if not np.isnan(myAngle):
             myAngle = myAngle[1]
         else:
-            myAngle = 90
+            continue
         if myAngle <= 80 or myAngle >= 100 :
             print('slow: ',myAngle)
             motor.forward(0.15)
