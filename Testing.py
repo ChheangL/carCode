@@ -35,10 +35,12 @@ def servo_begin(servo, angle):
 def main():
     while True:
         start = timeit.default_timer()
-        img = cam.read()[1]
-        if len(np.array(img))==0 : 
-            print("CAM Failed")
-            break;    
+        img = cam.read()[1]   
+        try:
+            imgLength = len(img)
+        except:
+            print("Cam Not Found Bra")
+            break
         myAngle = retrieve_angle(s1=70,h1=3, hd=10,layer = 2,img_path=img, frame=frame1)[2]
         #debugging(img, myAngle, points, mid_points)
         if myAngle.shape > (1,):
