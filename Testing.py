@@ -53,18 +53,20 @@ def main():
             break
         myAngle = retrieve_angle(s1=70,h1=3, hd=10,layer = 2,img_path=img, frame=frame1)[2]
         #debugging(img, myAngle, points, mid_points)
+        if x > 2 : break
         if not np.isnan(myAngle[0]):
             myAngle = myAngle[1]
         else:
+            print(myAngle)
             hardwareControl(myAngle, 0.15)
             continue
         if myAngle <= 80 or myAngle >= 100 :
-            print('slow: ',myAngle)''
+            print('slow: ',myAngle)
             hardwareControl(myAngle, 0.15)
         else:
             print('fast: ',myAngle)
             hardwareControl(myAngle, 0.15)
-        if x > 2 : break
+        
         x=x+1
         
 main()
