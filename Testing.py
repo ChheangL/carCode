@@ -12,6 +12,7 @@ from hardwareControl import *
 frame1 = Frame(640,480,10)
 cam = cv2.VideoCapture(0)
 Device.pin_facotry = PiGPIOFactory()
+print('pinnnnnnn: ',Device.pin_facotry )
 #init servo
 gpioPin = 4
 #correction = 0.45
@@ -41,6 +42,7 @@ def debug():
         #print('runtime : '+str(timeit.default_timer() - start))
 
 def main():
+    x = 0
     while True:
         #start = timeit.default_timer()
         img = cam.read()[1]   
@@ -54,13 +56,15 @@ def main():
         if not np.isnan(myAngle[0]):
             myAngle = myAngle[1]
         else:
+            
             continue
         if myAngle <= 80 or myAngle >= 100 :
             print('slow: ',myAngle)
-            motor.forward(0.15)
+            hardwareControl(myAngle, 0.15)
         else:
             print('fast: ',myAngle)
-            motor.forward(0.25)    
-        servo_begin(servo=myServo, angle=myAngle)
-
+            hardwareControl(myAngle, 0.15)
+        if x > 2 : break
+        x=x+1
+        
 main()
