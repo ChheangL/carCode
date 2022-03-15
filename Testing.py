@@ -42,7 +42,7 @@ def debug():
         #print('runtime : '+str(timeit.default_timer() - start))
 
 def main():
-    x = 0
+    #x = 0
     myAngle = 90
     while True:
         #start = timeit.default_timer()
@@ -55,8 +55,8 @@ def main():
             break
         myAngle = retrieve_angle(s1=70,h1=3, hd=10,layer = 2,img_path=img, frame=frame1)[2]
         #debugging(img, myAngle, points, mid_points)
-        if x > 2 : break
-        x=x+1
+        #if x > 2 : break
+        #x=x+1
         if not np.isnan(myAngle[0]):
             myAngle = myAngle[1]
         else:
