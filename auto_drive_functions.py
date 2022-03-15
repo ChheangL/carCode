@@ -50,7 +50,8 @@ def vector_check(points):
         #abs_B = math.sqrt(vector2[0]**2 + vector2[1]**2) #
         D = np.linalg.det([vector2,vector1])
         sin_theta = D/(norm1*norm2)
-        if sin_theta <= 0.1 and sin_theta >= -0.1 : 
+        print(sin_theta)
+        if sin_theta <= 0.4 and sin_theta >= -0.4 : 
             if (vector1[1] > 0 and vector1[0] > 0) or (vector1[0] <0 and vector1[1]<0):
                 return 'left'
             else:
