@@ -1,7 +1,7 @@
 import numpy as np
 import math
 from ImageFrame import Frame
-from EdgeFinder import EdgeFinder as ef
+from EdgeFinderV2 import EdgeFinder as ef
 
 
 def mid_angle(data,width,height):
@@ -20,55 +20,53 @@ def mid_angle(data,width,height):
         values = np.append(values,[np.append(mid,[angle])],axis=0)
     return values
 
-def perform_3sig(data,s1,hd):
-<<<<<<< HEAD
-	edges = {}
-	size = len(data.keys())
-	for num in range(1,int(size/2+1)):
-		detect = ef(s1,hd,data['L'+str(num)])
-		index_edg = detect.abnormal
-		if not np.isnan(index_edg):
-			
-			detect2 = ef(s1,hd,data['L'+str((size+1-num))])
-			index_edg2 = detect.abnormal
-			if not np.isnan(index_edg2) :
-				edges['L'+str((size+1-num))] = index_edg2
-				edges['L'+str(num)] = index_edg
-		if len(edges.keys()) >= 4 : break
-	return edges
-=======
-    edges = {}
-    size = len(data.keys())
-    for num in range(1,int(size/2+1)):
-        detect = ef(s1,hd,data['L'+str(num)])
-        index_edg = detect.abnormal
-        if not np.isnan(index_edg): 
-            detect2 = ef(s1,hd,data['L'+str((size+1-num))])
-            index_edg2 = detect2.abnormal
-            if not np.isnan(index_edg2):
-                edges['L'+str(num)] = index_edg
-                edges['L'+str((size+1-num))] = index_edg2
-        if len(edges.keys()) >= 4 : break 
-    return edges
->>>>>>> 47c6ef3100bad6a57c5ee9fda355b19fcfc9c66d
+def retrieve_angle(s1,h1,hd,layer,img_path,frame):
 
-def retrieve_angle(s1,hd,img_path,frame):
-    data = frame.get_data(img_path,1) #remove coordinate
-    edges = perform_3sig(data,s1,hd)
-    print(edges)
-<<<<<<< HEAD
-    #points = np.empty((0,2),float)
-=======
-    points = np.empty((0,2),float)
->>>>>>> 47c6ef3100bad6a57c5ee9fda355b19fcfc9c66d
-    #print(points)
-    #for key in edges.keys():
-    #    if np.isnan(edges[key]):
-    #        cord = [np.NaN,np.NaN]
-    #    else:
-    #        cord = frame.lines_frame[key][edges[key]]
-            #print('found')
-    #    points = np.append(points,[cord],axis=0)
-    #print(points)
-    #mid_points = mid_angle(points,frame.width,frame.height)
-    #return mid_points[:,2]
+    data = frame.get_data(img_path,layer) #remove coordinate    
+    #print(data)
+    edges = ef(data, s1,h1, hd)
+    points = np.empty((0,2), float)   
+    for key in edges.keys():
+        if key == 'side' : break
+        if not np.isnan(edges[key]):
+            temp = np.flip(frame.lines_frame[key],axis=0)
+            cord = temp[edges[key]]
+            points = np.append(points, [cord], axis=0)
+    if len(edges.keys()) <= 1: return points,np.NaN,np.array([90,90])
+    if 'side' in edges.keys():
+        if edges['side']==0 : return points,np.NaN,np.array([135,135])
+        if edges['side']==1 : return points,np.NaN,np.array([45,45])
+    check = vector_check(points)
+    if check == 'right': return points,np.NaN,np.array([45,45])
+    if check == 'left': return points,np.NaN,np.array([135,135])
+        
+    mid_points = mid_angle(data=points, width=frame.width, height=frame.height)
+    return points, mid_points, mid_points[:,2] 
+
+def vector_check(points):
+    if len(points[:,0]) >= 4 : 
+        vector1 = points[2]-points[0]
+        vector2 = points[3]-points[1]
+        norm1 = np.linalg.norm(vector1)
+        norm2 = np.linalg.norm(vector2)
+        #print(str(norm1)+', '+str(norm2))
+        abs_A = math.sqrt(vector1[0]**2 + vector1[1]**2)
+        abs_B = math.sqrt(vector2[0]**2 + vector2[1]**2)
+        #print(str(abs_A)+', '+str(abs_B))
+        #print(vector1)
+        #print(vector2)
+        D = np.linalg.det([vector2,vector1])
+        sin_theta = D/(norm1*norm2)
+        print(sin_theta)
+        #print(sin_theta)
+        if sin_theta <= 0.1 and sin_theta >= -0.1 : 
+            if (vector1[1] > 0 and vector1[0] > 0) or (vector1[0] <0 and vector1[1]<0):
+                return 'left'
+            else:
+                return 'right'
+        else :
+            return 'not a side'
+        
+    else:
+        return np.NaN 
+
