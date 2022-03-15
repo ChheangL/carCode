@@ -56,6 +56,7 @@ def main():
         myAngle = retrieve_angle(s1=70,h1=3, hd=10,layer = 2,img_path=img, frame=frame1)[2]
         #debugging(img, myAngle, points, mid_points)
         if x > 2 : break
+        x=x+1
         if not np.isnan(myAngle[0]):
             myAngle = myAngle[1]
         else:
@@ -70,6 +71,6 @@ def main():
             print('fast: ',myAngle)
             hardwareControl(myAngle, 0.15)
         
-        x=x+1
+        
         
 main()
