@@ -43,9 +43,11 @@ def debug():
 
 def main():
     x = 0
+    myAngle = 90
     while True:
         #start = timeit.default_timer()
-        img = cam.read()[1]   
+        img = cam.read()[1] 
+        previousAngle = myAngle  
         try:
             print(len(img))
         except:
@@ -57,6 +59,7 @@ def main():
         if not np.isnan(myAngle[0]):
             myAngle = myAngle[1]
         else:
+            myAngle = previousAngle
             print(myAngle)
             hardwareControl(myAngle, 0.15)
             continue
