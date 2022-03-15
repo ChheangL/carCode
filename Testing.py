@@ -56,10 +56,10 @@ def main():
         if not np.isnan(myAngle[0]):
             myAngle = myAngle[1]
         else:
-            
+            hardwareControl(myAngle, 0.15)
             continue
         if myAngle <= 80 or myAngle >= 100 :
-            print('slow: ',myAngle)
+            print('slow: ',myAngle)''
             hardwareControl(myAngle, 0.15)
         else:
             print('fast: ',myAngle)
