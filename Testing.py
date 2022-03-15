@@ -35,20 +35,21 @@ def servo_begin(servo, angle):
 def main():
     while True:
         start = timeit.default_timer()
-        img = cam.read()[1]    
-        points, mid_points, myAngle = retrieve_angle(s1=70,h1=3, hd=10,layer = 2,img_path=img, frame=frame1)
+        img = cam.read()[1]
+        if img==None : 
+            print("CAM NOT FOUND Bra")
+            break;    
+        myAngle = retrieve_angle(s1=70,h1=3, hd=10,layer = 2,img_path=img, frame=frame1)[2]
         #debugging(img, myAngle, points, mid_points)
         if myAngle.shape > (1,):
-            if math.isnan(myAngle[1]) : continue
             myAngle = myAngle[1]
         else:
             myAngle = 90
-        
         if myAngle <= 80 or myAngle >= 100 :
-            print('slow')
+            print('slow: ',myAngle)
             motor.forward(0.15)
         else:
-            print('fast')
+            print('fast: ',myAngle)
             motor.forward(0.25)
         
         servo_begin(servo=myServo, angle=myAngle)
