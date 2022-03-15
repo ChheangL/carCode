@@ -44,7 +44,7 @@ def main():
             break
         myAngle = retrieve_angle(s1=70,h1=3, hd=10,layer = 2,img_path=img, frame=frame1)[2]
         #debugging(img, myAngle, points, mid_points)
-        if not np.isnan(myAngle):
+        if not np.isnan(myAngle[0]):
             myAngle = myAngle[1]
         else:
             continue
