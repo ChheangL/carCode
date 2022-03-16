@@ -27,11 +27,6 @@ print('init motor')
 motor = Motor(forward = 23, backward = 24, enable = 25, pwm=True)
 
 
-
-def hardwareControl(servoAngle, motorSpeed):
-    motor.forward(motorSpeed)
-    servo_begin(servo=myServo, angle = servoAngle)
-
 def debug():
      while True:
         #start = timeit.default_timer()
@@ -62,14 +57,14 @@ def main():
         else:
             myAngle = previousAngle
             print(myAngle)
-            hardwareControl(myAngle, 0.15)
+            hardwareControl(myServo,myAngle,motor, 0.15)
             continue
         if myAngle <= 80 or myAngle >= 100 :
             print('slow: ',myAngle)
-            hardwareControl(myAngle, 0.15)
+            hardwareControl(myServo,myAngle,motor, 0.15)
         else:
             print('fast: ',myAngle)
-            hardwareControl(myAngle, 0.15)
+            hardwareControl(myServo,myAngle,motor, 0.15)
         
         
         

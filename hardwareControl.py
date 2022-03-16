@@ -14,3 +14,7 @@ def pulse_width(duty_cycle, period=0.02):
 
 def degree(pulse_width, max_pw=0.019):
     return pulse_width*180/max_pw
+
+def hardwareControl(servo,carAngle, mymotor,motorSpeed):
+    mymotor.forward(motorSpeed)
+    servo_begin(servo=servo, angle = carAngle)
