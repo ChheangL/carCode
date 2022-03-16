@@ -18,4 +18,9 @@ print('init motor')
 motor = Motor(forward = 23, backward = 24, enable = 25, pwm=True)
 
 hardwareControl(myServo,100,motor,0)
-sleep(10)
+sleep(1)
+hardwareControl(myServo,80,motor,0)
+sleep(1)
+hardwareControl(myServo,100,motor,0)
+sleep(1)
+
