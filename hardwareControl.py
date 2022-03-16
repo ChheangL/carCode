@@ -3,7 +3,7 @@ from gpiozero.pins.pigpio import PiGPIOFactory
 
 def servo_begin(servo, angle):
 	try:
-		print("Angle: ", angle)
+		print("ServoAngle: ", angle)
 		angleValue = (2/180 * angle - 1)
 		servo.value = angleValue
 	except KeyboardInterrupt:
