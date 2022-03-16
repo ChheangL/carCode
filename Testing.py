@@ -27,6 +27,8 @@ print('init motor')
 motor = Motor(forward = 23, backward = 24, enable = 25, pwm=True)
 
 
+
+
 def debug():
      while True:
         #start = timeit.default_timer()
