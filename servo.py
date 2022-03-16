@@ -2,7 +2,8 @@ from hardwareControl import *
 from gpiozero import Servo, Motor,Device
 from gpiozero.pins.pigpio import PiGPIOFactory
 from time import sleep
-#Device.pin_facotry = PiGPIOFactory()
+
+Device.pin_facotry = PiGPIOFactory()
 #print('pinnnnnnn: ',Device.pin_facotry )
 #init servo
 gpioPin = 4
