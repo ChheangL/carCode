@@ -9,14 +9,12 @@ def mid_angle(data,width,height):
     values = np.empty((0,3),float)
     for i in range (0, data_size,2):
         mid = (data[i] + data[i+1])/2
-        if mid[0]-(width/2.) != 0.0:
-            tan = (mid[1]-height)/(mid[0]-(width/2.))
-            angle_radiant = math.atan(tan)
-            angle_degree = math.degrees(angle_radiant)
-            angle = ((-1)*angle_degree if angle_degree < 0 else 180-angle_degree)
-        else :
-            angle = 90.0
-        values = np.append(values,[np.append(mid,[angle])],axis=0)
+        tan = (mid[0]-(width/2.))/(height-mid[1])
+        angle_radiant = math.atan(tan)
+        angle_degree = math.degrees(angle_radiant)
+        print('The degree is {:.2f}'.format(angle_degree))
+        #angle = ((-1)*angle_degree if angle_degree < 0 else 180-angle_degree)
+        values = np.append(values,[np.append(mid,[angle_degree])],axis=0)
     return values
 
 
@@ -26,12 +24,14 @@ def retrieve_angle(s1,h1,hd,layer,img_path,frame):
     edges = ef(s1,h1, hd,data) #calculate the Boundary
     #reducing only pair points
     points = np.empty([0,2],int)
-    for i in range(0,4,2):
+    for i in range(0,6,2):
         if edges.BND[i] != 0 and edges.BND[i+1]!=0 : 
             points= np.append(points,[frame.fline[str(i+1)][int(edges.BND[i])]],axis=0)
             points= np.append(points,[frame.fline[str(i+2)][int(edges.BND[i+1])]],axis=0)
+        if len(points)==4:break
     if len(points) == 0:
-        points = points = np.array([frame.fline[key][int(edges.BND[int(key)-1])] for key in frame.fline.keys() if edges.BND[int(key)-1]!=0])[0:4]
+        points = np.array([frame.fline[key][int(edges.BND[int(key)-1])] for key in frame.fline.keys() if edges.BND[int(key)-1]!=0])
+        points = (points>0)[0:4]
     print(points,len(points))
     if len(points) < 4: return np.NaN,np.NaN,np.array([np.NaN]) 
     check = vector_check(points)
