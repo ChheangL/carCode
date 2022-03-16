@@ -59,14 +59,14 @@ def main():
         else:
             myAngle = previousAngle
             print(myAngle)
-            hardwareControl(myServo,myAngle,motor, 0.15)
+            #hardwareControl(myServo,myAngle,motor, 0.15)
             continue
         if myAngle <= 80 or myAngle >= 100 :
             print('slow: ',myAngle)
-            hardwareControl(myServo,myAngle,motor, 0.15)
+            #hardwareControl(myServo,myAngle,motor, 0.15)
         else:
             print('fast: ',myAngle)
-            hardwareControl(myServo,myAngle,motor, 0.15)
+            #hardwareControl(myServo,myAngle,motor, 0.15)
         
         
         
