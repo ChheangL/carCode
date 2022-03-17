@@ -11,7 +11,7 @@ from hardwareControl import *
 
 frame1 = Frame(640,480,10)
 cam = cv2.VideoCapture(0)
-Device.pin_facotry = PiGPIOFactory()
+#Device.pin_facotry = PiGPIOFactory()
 #print('pinnnnnnn: ',Device.pin_facotry )
 #init servo
 gpioPin = 4
@@ -20,7 +20,7 @@ maxpw = (2.0 + correction) / 1000
 minpw = (1.0 - correction) / 1000
 #maxpw = pulse_width(duty_cycle=99)
 #minpw = pulse_width(duty_cycle=1)
-myServo = Servo(gpioPin, min_pulse_width=minpw, max_pulse_width=maxpw)
+#myServo = Servo(gpioPin, min_pulse_width=minpw, max_pulse_width=maxpw)
 
 #init motor
 print('init motor')
@@ -66,7 +66,7 @@ def main():
             #hardwareControl(myServo,myAngle,motor, 0.15)
         else:
             print('fast: ',myAngle)
-            #hardwareControl(myServo,myAngle,motor, 0.15)
+            # hardwareControl(myServo,myAngle,motor, 0.15)
         
         
         
