@@ -46,7 +46,7 @@ def main():
         img = cam.read()[1] 
         previousAngle = myAngle  
         try:
-            print(len(img))
+            len(img)
         except:
             print("Cam Not Found Bra")
             break
