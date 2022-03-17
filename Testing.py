@@ -58,7 +58,7 @@ def main():
             myAngle = np.mean(myAngle)
         else:
             myAngle = previousAngle
-            print(myAngle)
+            print('no: ',myAngle)
             #hardwareControl(myServo,myAngle,motor, 0.15)
             continue
         if myAngle <= 80 or myAngle >= 100 :
