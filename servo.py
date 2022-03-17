@@ -8,8 +8,8 @@ gpioPin = 4
 #correction = 0.45
 #maxpw = (2.0 + correction) / 1000
 #minpw = (1.0 - correction) / 1000
-maxpw = pulse_width(duty_cycle=99)
-minpw = pulse_width(duty_cycle=1)
+maxpw = pulse_width(duty_cycle=75)
+minpw = pulse_width(duty_cycle=25)
 Device.pin_facotry = PiGPIOFactory()
 myServo = Servo(gpioPin, min_pulse_width=minpw, max_pulse_width=maxpw)
 
