@@ -45,7 +45,7 @@ def retrieve_angle(s1,h1,hd,layer,img_path,frame):
                     points = pleft
                     break
         
-    print(points)
+    print(edges.BND)
     if len(points) < 3: return np.NaN,np.NaN,np.array([np.NaN]) 
     check = vector_check(points)
     if check == 'left': return points,np.array([-45,-45]),np.array([-45,-45])
