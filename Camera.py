@@ -14,6 +14,5 @@ while(True):
   except KeyboardInterrupt:
     #CTRL when finished+Press C
     break
-
 capture.release()
 cv2.destroyAllWindows()
