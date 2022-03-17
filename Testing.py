@@ -9,7 +9,7 @@ from hardwareControl import *
 #import math
 #import timeit
 
-frame1 = Frame(640,480,10)
+frame1 = Frame(640,480,15)
 cam = cv2.VideoCapture(0)
 #Device.pin_facotry = PiGPIOFactory()
 #print('pinnnnnnn: ',Device.pin_facotry )
@@ -55,7 +55,7 @@ def main():
         #if x > 2 : break
         #x=x+1
         if not np.isnan(myAngle[0]):
-            myAngle = myAngle[1]
+            myAngle = np.mean(myAngle)
         else:
             myAngle = previousAngle
             print(myAngle)

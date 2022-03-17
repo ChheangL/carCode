@@ -24,15 +24,30 @@ def retrieve_angle(s1,h1,hd,layer,img_path,frame):
     edges = ef(s1,h1, hd,data) #calculate the Boundary
     #reducing only pair points
     points = np.empty([0,2],int)
-    for i in range(0,len(edges.BND)-2,2):
+    for i in range(0,len(edges.BND),2):
         if edges.BND[i] != 0 and edges.BND[i+1]!=0 : 
             points= np.append(points,[frame.fline[str(i+1)][int(edges.BND[i])]],axis=0)
             points= np.append(points,[frame.fline[str(i+2)][int(edges.BND[i+1])]],axis=0)
-        if len(points)==4:break
+        if len(points)==6:break
     if len(points) == 0:
-        points = np.array([frame.fline[key][int(edges.BND[int(key)-1])] for key in frame.fline.keys() if edges.BND[int(key)-1]!=0])[0:4]
+        pright = np.empty([0,2],int)
+        pleft = np.empty([0,2],int)
+        for i in range(0,len(edges.BND),2):
+            right = edges.BND[i]
+            left = edges.BND[i+1]
+            if right !=0:
+                pright = np.append(pright,[frame.fline[str(i+1)][int(right)]],axis=0)
+                if len(pright)==4: 
+                    points = pright
+                    break
+            if left !=0:
+                pleft= np.append(pleft,[frame.fline[str(i+1)][int(left)]],axis=0)
+                if len(pleft)==4: 
+                    points = pleft
+                    break
+        
     print(points)
-    if len(points) < 4: return np.NaN,np.NaN,np.array([np.NaN]) 
+    if len(points) < 3: return np.NaN,np.NaN,np.array([np.NaN]) 
     check = vector_check(points)
     if check == 'left': return points,np.array([-45,-45]),np.array([-45,-45])
     if check == 'right': return points,np.array([45,45]),np.array([45,45])
@@ -50,7 +65,7 @@ def vector_check(points):
         D = np.linalg.det([vector2,vector1])
         sin_theta = D/(norm1*norm2)
         print(sin_theta)
-        if sin_theta <= 0.3 and sin_theta >= -0.3 : 
+        if sin_theta <= 0.1 and sin_theta >= -0.1 : 
             if (vector1[1] > 0 and vector1[0] > 0) or (vector1[0] <0 and vector1[1]<0):
                 return 'left'
             else:
