@@ -50,7 +50,7 @@ def main():
         except:
             print("Cam Not Found Bra")
             break
-        myAngle = retrieve_angle(s1=70,h1=3, hd=10,layer = 2,img_path=img, frame=frame1)[2]
+        myAngle = retrieve_angle(s1=50,h1=3, hd=10,layer = 2,img_path=img, frame=frame1)[2]
         #debugging(img, myAngle, points, mid_points)
         #if x > 2 : break
         #x=x+1
