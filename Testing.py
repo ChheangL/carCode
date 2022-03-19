@@ -44,7 +44,7 @@ def main():
     while True:
         #start = timeit.default_timer()
         img = cam.read()[1] 
-        cv2.imshow('frame',img)
+        cv2.imshow('img',img)
         previousAngle = myAngle  
         try:
             len(img)

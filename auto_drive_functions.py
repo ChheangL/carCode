@@ -40,12 +40,13 @@ def retrieve_angle(s1,h1,hd,layer,img_path,frame):
                     points = pright
                     break
             if left !=0:
-                pleft= np.append(pleft,[frame.fline[str(i+1)][int(left)]],axis=0)
+                pleft= np.append(pleft,[frame.fline[str(i+2)][int(left)]],axis=0)
                 if len(pleft)==4: 
                     points = pleft
                     break
         
     print(edges.BND)
+#     print(points)
     if len(points) < 3: return np.NaN,np.NaN,np.array([np.NaN]) 
     check = vector_check(points)
     if check == 'left': return points,np.array([-45,-45]),np.array([-45,-45])
@@ -63,12 +64,12 @@ def vector_check(points):
         #abs_B = math.sqrt(vector2[0]**2 + vector2[1]**2) #
         D = np.linalg.det([vector2,vector1])
         sin_theta = D/(norm1*norm2)
-        print(sin_theta)
+#         print(sin_theta)
         if sin_theta <= 0.1 and sin_theta >= -0.1 : 
             if (vector1[1] > 0 and vector1[0] > 0) or (vector1[0] <0 and vector1[1]<0):
-                return 'left'
-            else:
                 return 'right'
+            else:
+                return 'left'
         else :
             return 'not a side'
         

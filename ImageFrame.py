@@ -1,4 +1,3 @@
-from matplotlib.pyplot import axis
 import numpy as np
 import pickle as pk
 import math 
