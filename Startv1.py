@@ -7,6 +7,7 @@ from pylab import *
 from PIL import Image
 from time import sleep
 import matplotlib
+
 matplotlib.rcParams['backend']='cairo'
 matplotlib.get_backend()
 
