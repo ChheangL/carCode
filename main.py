@@ -1,19 +1,51 @@
 from auto_drive_functions import retrieve_angle
 from ImageFrame import Frame
-import cv2
+# import cv2
+# from bufflessVideoCapture import VideoCapture
 import numpy as np
 from hardwareControl import *
-import timeit
+# import timeit
+
+import cv2, queue, threading, time
+
+# bufferless VideoCapture
+class VideoCapture:
+
+  def __init__(self, name):
+    self.cap = cv2.VideoCapture(name)
+    self.cap.set(3,1280)
+    self.cap.set(4,720)
+    self.q = queue.Queue()
+    t = threading.Thread(target=self._reader)
+    t.daemon = True
+    t.start()
+
+  # read frames as soon as they are available, keeping only most recent one
+  def _reader(self):
+    while True:
+      ret, frame = self.cap.read()
+      if not ret:
+        break
+      if not self.q.empty():
+        try:
+          self.q.get_nowait()   # discard previous (unprocessed) frame
+        except queue.Empty:
+          pass
+      self.q.put(frame)
+
+  def read(self):
+    return self.q.get()
+
+
+
+
+
+
+# ----------------------------------------------------------------
 
 frame1 = Frame(1280,720,10)
-cam = cv2.VideoCapture(0)
-codec = cv2.VideoWriter_fourcc('D','I','V','X')
-cam.set(6,codec)
-cam.set(5,1)
-cam.set(3,1280)
-# it works setting the resolution
-cam.set(4,720)
-# but the picture color.
+cam = VideoCapture(0)
+
 
 # Ruduce Jitter
 Device.pin_factory = PiGPIOFactory()
@@ -32,12 +64,9 @@ def main():
     while True:
         try:
 #             start = timeit.default_timer()
-            ret, img = cam.read()
-            if ret is False:
-                raise IOError
-            cv2.imshow('frame',img)
-            cv2.waitKey(1)
-
+            img = cam.read()
+#             cv2.imshow("frame", img)
+#             cv2.waitKey(1)
 #             print('resolution: ',np.array(img).shape)
             allPoints,points,mid_points,myAngle = retrieve_angle(s1=50,h1=3, hd=10,layer = 0,img_path=img, frame=frame1)
             try:
@@ -55,7 +84,7 @@ def main():
             servo.detach()
             motor.stop()
             break  
-    cam.release()
+#     cam.release()
 
 
 main()
