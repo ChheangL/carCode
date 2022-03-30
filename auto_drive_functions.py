@@ -22,13 +22,14 @@ def retrieve_angle(s1,h1,hd,layer,img_path,frame):
     data = frame.get_data(img_path,layer) #select the data    
     edges = ef(s1,h1, hd,data) #calculate the Boundary
     #reducing only pair points
+    allPoints = np.array([frame.fline[i][int(edges.BND[int(i)-1])]for i in frame.fline.keys()])
     points = np.empty([0,2],int)
-    for i in range(0,len(edges.BND),2):
+    for i in range(2,len(edges.BND)-6,2):
         if edges.BND[i] != 0 and edges.BND[i+1]!=0 : 
             points= np.append(points,[frame.fline[str(i+1)][int(edges.BND[i])]],axis=0)
             points= np.append(points,[frame.fline[str(i+2)][int(edges.BND[i+1])]],axis=0)
         if len(points)==6:break
-    if len(points) == 0:
+    if len(points) < 3:
         pright = np.empty([0,2],int)
         pleft = np.empty([0,2],int)
         for i in range(0,len(edges.BND),2):
@@ -45,14 +46,13 @@ def retrieve_angle(s1,h1,hd,layer,img_path,frame):
                     points = pleft
                     break
         
-    print(edges.BND)
-#     print(points)
-    if len(points) < 3: return np.NaN,np.NaN,np.array([np.NaN]) 
+#     print(edges.BND)
+    if len(points) < 3: return allPoints,np.NaN,np.NaN,np.array([np.NaN]) 
     check = vector_check(points)
-    if check == 'left': return points,np.array([-45,-45]),np.array([-45,-45])
-    if check == 'right': return points,np.array([45,45]),np.array([45,45])
+    if check == 'right': return allPoints,points,np.array([-45,-45]),np.array([-45,-45])
+    if check == 'left': return allPoints,points,np.array([45,45]),np.array([45,45])
     mid_points = mid_angle(data=points, width=frame.width, height=frame.height)
-    return points, mid_points, mid_points[:,2] 
+    return allPoints, points, mid_points, mid_points[:,2] 
 
 def vector_check(points):
     if len(points[:,0]) >= 4 : 
