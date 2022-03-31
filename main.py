@@ -73,12 +73,12 @@ def main():
 #                 print(myAngle)
                 
                 myAngle = np.mean(myAngle)
-#                 print(myAngle)
+                print(myAngle)
             except:
                 continue
             
             ServoControl(servo, myAngle)
-            MotorControl(motor, speed=0.15)
+            MotorControl(motor, speed=0.5)
 #             print('runtime : '+str(timeit.default_timer() - start))
         except :
             servo.detach()

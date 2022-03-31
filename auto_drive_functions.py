@@ -48,7 +48,7 @@ def retrieve_angle(s1,h1,hd,layer,img_path,frame):
                     return allPoints,points,np.array([45,45]),np.array([45,45])
                     break
         
-#     print(edges.BND)
+    print(edges.BND)
     if len(points) < 3: return allPoints,np.NaN,np.NaN,np.array([np.NaN]) 
     check = vector_check(points)
     if check == 'right': return allPoints,points,np.array([-45,-45]),np.array([-45,-45])
