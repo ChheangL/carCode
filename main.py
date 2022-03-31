@@ -78,7 +78,7 @@ def main():
                 continue
             
             ServoControl(servo, myAngle)
-            MotorControl(motor, speed=0.5)
+            MotorControl(motor, speed=0.15)
 #             print('runtime : '+str(timeit.default_timer() - start))
         except :
             servo.detach()
