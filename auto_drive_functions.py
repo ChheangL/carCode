@@ -39,11 +39,13 @@ def retrieve_angle(s1,h1,hd,layer,img_path,frame):
                 pright = np.append(pright,[frame.fline[str(i+1)][int(right)]],axis=0)
                 if len(pright)==4: 
                     points = pright
+                    return allPoints,points,np.array([-45,-45]),np.array([-45,-45])
                     break
             if left !=0:
                 pleft= np.append(pleft,[frame.fline[str(i+2)][int(left)]],axis=0)
                 if len(pleft)==4: 
                     points = pleft
+                    return allPoints,points,np.array([45,45]),np.array([45,45])
                     break
         
 #     print(edges.BND)
