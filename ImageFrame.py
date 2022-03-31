@@ -51,7 +51,7 @@ class Frame:
         img = np.array(img)
         if not np.isnan(layer) : img = img[:,:,layer]
         #img = 255.0*(img/255.0)**6 #for blurring the image
-        data = np.empty([320,0],int)
+        data = np.empty([int(self.width/2.0),0],int)
         for key in self.fline.keys():
             data = np.append(data,np.array([[img[y,x]] for x,y in self.fline[key]]),axis=1)
         return data
