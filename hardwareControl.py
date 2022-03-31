@@ -1,20 +1,31 @@
-from gpiozero import Servo, Motor,Device
+from gpiozero import Servo, Motor, Device
 from gpiozero.pins.pigpio import PiGPIOFactory
 
-def servo_begin(servo, angle):
-	try:
-		print("ServoAngle: ", angle)
-		angleValue = (2/180 * angle - 1)
-		servo.value = angleValue
-	except KeyboardInterrupt:
-		print("Program stopped")
+def ServoControl(servo, angle):
+    try:
+        angle=angle+90
+        if angle < 45:
+            angle = 45
+        elif angle > 135:
+            angle = 135
+            
+        angleValue = (2/180 * angle - 1)
+        servo.value = angleValue
+#         print("ServoAngle: ", angleValue)
+            
+    except KeyboardInterrupt:
+        servo.detach()
+#         print("Program stopped")
 
 def pulse_width(duty_cycle, period=0.02):
-    return duty_cycle*period/100
+    result = round(duty_cycle * period / 100, 4)
+#     print('pulse_width: ', result)
+    return result
 
-def degree(pulse_width, max_pw=0.019):
-    return pulse_width*180/max_pw
+def degree(pulse_width, max_pulse_width=0.002, degree_of_motor=180):
+    result = round(pulse_width * degree_of_motor / max_pulse_width, 4)
+#     print('pulse_width:', pulse_width, '= degree:', result)
+    return result
 
-def hardwareControl(servo,carAngle, mymotor,motorSpeed):
-    mymotor.forward(motorSpeed)
-    servo_begin(servo=servo, angle = carAngle)
+def MotorControl(myMotor, speed):
+    myMotor.forward(speed)
