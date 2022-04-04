@@ -79,7 +79,7 @@ def main():
             
             ServoControl(servo, myAngle)
             if myAngle >-20.0 and myAngle < 20.0:
-              MotorControl(motor, speed=0.5)
+              MotorControl(motor, speed=0.25)
             else:
               MotorControl(motor, speed=0.15)
 
