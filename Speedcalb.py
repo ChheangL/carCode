@@ -12,6 +12,6 @@ servo = Servo(pin=4, min_pulse_width=min_pulse, max_pulse_width=max_pulse)
 motor = Motor(forward = 23, backward = 24, enable = 25, pwm=True)
 
 ServoControl(servo, 0)
-motor.forward(0.7)
+motor.backward(0.1)
 time.sleep(2)
 MotorControl(motor,0)
