@@ -79,3 +79,9 @@ def vector_check(points):
     else:
         return np.NaN 
 
+
+
+def positionCk(Td, Df, Speed):
+    carSpeed = (40.2*Speed+3.87)/2.0 #TrueCarSpeed = distance (cm) / 2 Time (s)
+    Tt = Df/carSpeed # time of car move in Df distance (cm)
+    return Td >= Tt 
