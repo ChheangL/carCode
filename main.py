@@ -69,8 +69,8 @@ def main():
       else :
         start2 = timeit.default_timer()
       img = cam.read()
-#             cv2.imshow("frame", img)
-#             cv2.waitKey(1)
+      cv2.imshow("frame", img)
+      cv2.waitKey(1)
 #             print('resolution: ',np.array(img).shape)
       _,_,_,myAngle = retrieve_angle(s1=50,h1=3, hd=10,layer = 0,img_path=img, frame=frame1)
 #                 print(myAngle)
@@ -90,7 +90,7 @@ def main():
           myAngle = Ang2
         startTimer = not startTimer
         
-      print(startTimer,' ',myAngle)
+      print(timeit.default_timer() - start1,' ',myAngle)
       ServoControl(servo, myAngle)
       if myAngle >-20.0 and myAngle < 20.0:
         MotorControl(motor, speed=0.15)
