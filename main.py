@@ -82,9 +82,9 @@ def main():
         myAngle = 0
         startTimer = False
       else:
-        if timeit.default_timer() - start1 >=1.01:
+        if timeit.default_timer() - start1 >=0.7:
           myAngle = Ang1
-        elif timeit.default_timer()-start2 >=1.01:
+        elif timeit.default_timer()-start2 >=0.7:
           myAngle = Ang2
         else:
           if startTimer : 
