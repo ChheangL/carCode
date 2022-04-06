@@ -63,7 +63,7 @@ def main():
   x = False
   startTimer = True
   while True:
-    try:
+#    try:
       if startTimer :
         start1 = timeit.default_timer()
       else :
@@ -80,13 +80,13 @@ def main():
         myAngle = 0
         startTimer = False
       else:
-        if startTimer : 
-            Ang1 = np.mean(myAngle)
-        else:
-            Ang2 = np.mean(myAngle)
-        if timeit.default_timer() - start1 >=1.01:
+	if startTimer:
+		Ang1 = np.mean(myAngle)
+	else:
+		Ang2 = np.mean(myAngle)
+        if timeit.default_timer() - start1 >=0.7:
           myAngle = Ang1
-        elif timeit.default_timer()-start2 >=1.01:
+        elif timeit.default_timer()-start2 >=0.7:
           myAngle = Ang2
         startTimer = not startTimer
         
@@ -98,7 +98,7 @@ def main():
         MotorControl(motor, speed=0.15)
 
 #             print('runtime : '+str(timeit.default_timer() - start))
-    except :
+#    except :
         servo.detach()
         motor.stop()
         break  
