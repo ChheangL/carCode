@@ -1,5 +1,3 @@
-from sunau import AUDIO_FILE_ENCODING_LINEAR_32
-from sympy import false
 from auto_drive_functions import retrieve_angle
 from ImageFrame import Frame
 # import cv2
@@ -82,15 +80,14 @@ def main():
         myAngle = 0
         startTimer = False
       else:
+        if startTimer : 
+            Ang1 = np.mean(myAngle)
+        else:
+            Ang2 = np.mean(myAngle)
         if timeit.default_timer() - start1 >=1.01:
           myAngle = Ang1
         elif timeit.default_timer()-start2 >=1.01:
           myAngle = Ang2
-        else:
-          if startTimer : 
-            Ang1 = np.mean(myAngle)
-          else:
-            Ang2 = np.mean(myAngle)
         startTimer = not startTimer
         
       print(startTimer,' ',myAngle)
