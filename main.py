@@ -99,9 +99,9 @@ def main():
 
 #             print('runtime : '+str(timeit.default_timer() - start))
 #    except :
-        servo.detach()
-        motor.stop()
-        break  
+#        servo.detach()
+#        motor.stop()
+#        break  
 #     cam.release()
 
 
