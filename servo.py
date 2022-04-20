@@ -1,4 +1,5 @@
 from hardwareControl import *
+import time
 Device.pin_factory = PiGPIOFactory()
 
 # min: 0.0002  mid: 0.01  max: 0.0197
@@ -9,3 +10,13 @@ max_pulse = pulse_width(duty_cycle=12.5) # 2.5ms
 servo = Servo(pin=4, min_pulse_width=min_pulse, max_pulse_width=max_pulse)
 
 ServoControl(servo, 0)
+
+time.sleep(1)
+
+ServoControl(servo,-45)
+time.sleep(1)
+
+ServoControl(servo,45)
+time.sleep(1)
+
+ServoControl(servo,0)
