@@ -17,7 +17,6 @@ class Frame:
             for jter in range(1,height):
                 test = np.abs([tan-jter/iter])
                 if test[0]<0.01:
-                    #print(str(iter) +' '+ str(480-jter+1))
                     lr = np.append(lr,[[int(width/2+iter-1),height-jter+1-1]],axis=0)
                     ll = np.append(ll,[[int(width/2-iter-1),height-jter+1-1]],axis=0)
                     break

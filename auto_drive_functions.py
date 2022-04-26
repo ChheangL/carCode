@@ -23,7 +23,7 @@ def retrieve_angle(s1,h1,hd,layer,img_path,frame):
     edges = ef(s1,h1, hd,data) #calculate the Boundary
     print(edges.BND)
 
-    #reducing only pair points
+    #reducing to points
     allPoints = np.array([frame.fline[i][int(edges.BND[int(i)-1])]for i in frame.fline.keys()])
     points = np.empty([0,2],int)
     for i in range(2,len(edges.BND)-6,2):
@@ -49,7 +49,7 @@ def retrieve_angle(s1,h1,hd,layer,img_path,frame):
                     points = pleft
                     return allPoints,points,np.array([45,45]),np.array([45,45])
                     break
-        
+    # return null if no points found
     if len(points) < 3: return allPoints,np.NaN,np.NaN,np.array([np.NaN]) 
     check = vector_check(points)
     if check == 'right': return allPoints,points,np.array([-45,-45]),np.array([-45,-45])
