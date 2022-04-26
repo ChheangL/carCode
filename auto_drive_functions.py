@@ -32,53 +32,50 @@ def retrieve_angle(s1,h1,hd,layer,img_path,frame):
             points= np.append(points,[frame.fline[str(i+2)][int(edges.BND[i+1])]],axis=0)
         if len(points)==6:break
     if len(points) < 3:
-        pright = np.empty([0,2],int)
-        pleft = np.empty([0,2],int)
-        for i in range(0,len(edges.BND),2):
-            right = edges.BND[i]
-            left = edges.BND[i+1]
-            if right !=0:
-                pright = np.append(pright,[frame.fline[str(i+1)][int(right)]],axis=0)
-                if len(pright)==4: 
-                    points = pright
-                    return allPoints,points,np.array([-45,-45]),np.array([-45,-45])
-                    break
-            if left !=0:
-                pleft= np.append(pleft,[frame.fline[str(i+2)][int(left)]],axis=0)
-                if len(pleft)==4: 
-                    points = pleft
-                    return allPoints,points,np.array([45,45]),np.array([45,45])
-                    break
+        one_side = one_side_check(edges,frame)
+        if not np.isnan(one_side[0]): return allPoints,one_side_check(edges,frame)
     # return null if no points found
     if len(points) < 3: return allPoints,np.NaN,np.NaN,np.array([np.NaN]) 
-    check = vector_check(points)
-    if check == 'right': return allPoints,points,np.array([-45,-45]),np.array([-45,-45])
-    if check == 'left': return allPoints,points,np.array([45,45]),np.array([45,45])
-    mid_points = mid_angle(data=points, width=frame.width, height=frame.height)
+    check = vector_checkV2(points)
+    if not np.isnan(check[0]): return allPoints,points,np.NaN,check  #found only one sided
+    mid_points = mid_angle(data=points, width=frame.width, height=frame.height) #found two-sides and proceed to calculate angle
     return allPoints, points, mid_points, mid_points[:,2] 
 
-def vector_check(points):
+def one_side_check(edges,frame):
+    pright = np.empty([0,2],int)
+    pleft = np.empty([0,2],int)
+    for i in range(0,len(edges.BND),2):
+        right = edges.BND[i]
+        left = edges.BND[i+1]
+        if right !=0:
+            pright = np.append(pright,[frame.fline[str(i+1)][int(right)]],axis=0)
+            if len(pright)==4: 
+                points = pright
+                degree = vector_checkV2(points)
+                return points,np.array([-45,-45]),degree
+                break
+        if left !=0:
+            pleft= np.append(pleft,[frame.fline[str(i+2)][int(left)]],axis=0)
+            if len(pleft)==4: 
+                points = pleft
+                degree = vector_checkV2(points)
+                return points,np.array([45,45]),degree
+                break
+    return np.NaN,np.NaN,np.NaN
+
+def vector_checkV2(points):
     if len(points[:,0]) >= 4 : 
         vector1 = points[2]-points[0]
         vector2 = points[3]-points[1]
-        norm1 = np.linalg.norm(vector1)
-        norm2 = np.linalg.norm(vector2)
-        #abs_A = math.sqrt(vector1[0]**2 + vector1[1]**2) # The code here just to show that it is the same as norm function
-        #abs_B = math.sqrt(vector2[0]**2 + vector2[1]**2) #
-        D = np.linalg.det([vector2,vector1])
-        sin_theta = D/(norm1*norm2)
-#         print(sin_theta)
-        if sin_theta <= 0.1 and sin_theta >= -0.1 : 
-            if (vector1[1] > 0 and vector1[0] > 0) or (vector1[0] <0 and vector1[1]<0):
-                return 'right'
-            else:
-                return 'left'
+        if (vector1[1] * vector1[0] > 0) and (vector2[1] * vector2[0] > 0) or (vector1[1] * vector1[0] < 0) and (vector2[0] * vector2[1]<0):
+            #Should turn Right or right
+            radians = np.array([math.math.atan(vector1[0]/vector1[1]),math.atan(vector2[0]/vector2[1])])
+            #return in degree
+            return np.degrees(radians)
         else :
-            return 'not a side'
+            #not a side
+            return np.array([np.NaN,np.NaN])
         
-    else:
-        return np.NaN 
-
 
 
 def positionCk(Td, Df, Speed):
