@@ -29,12 +29,16 @@ class EdgeFinder :
         a = 0
         b = self.s1
         while True:
-            segCal = self.data[a:b,:]
+            segCal = self.data[a:b,:] #creating segment to calculate mean and Std
             plusCheck = np.mean(segCal,axis=0) + 3* np.std(segCal,axis=0)
             minusCheck = np.mean(segCal,axis=0) - 3* np.std(segCal,axis=0)
+            # if hd interval is out-of-range, then just use a smaller hd
             if(b+self.hd) > len(self.data): self.hd = len(self.data)-b
+            # creating hd segment for testing the 3-sigma boundaries 
             test = self.data[b-1:b+self.hd,:]
-            checktop = (test > plusCheck)+(test<minusCheck)
+            # Check the top and bottom, return True or False Ex: [0,0,0,1,0,0 ...]
+            checktop = (test > plusCheck)+(test < minusCheck)
+            # 
             index = np.min(checktop,axis=0)
             tempBND = np.where(index==0,index,index+(b-2))
             BND = np.where(BND==0,tempBND,BND)
