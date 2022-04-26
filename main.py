@@ -63,7 +63,7 @@ def main():
     x = False
     startTimer = True
     while True:
-        try:
+#         try:
             if startTimer :
                 start1 = timeit.default_timer()
             else :
@@ -72,8 +72,8 @@ def main():
     #         cv2.imshow("frame", img)
     #         cv2.waitKey(1)
     #             print('resolution: ',np.array(img).shape)
-            _,_,_,myAngle = retrieve_angle(s1=50,h1=3, hd=10,layer = 0,img_path=img, frame=frame1)
-    #                 print(myAngle)
+            _,points,_,myAngle = retrieve_angle(s1=50,h1=3, hd=10,layer = 0,img_path=img, frame=frame1)
+            print(points)
     #       if not x:
     #         Ang1 = np.mean(myAngle)
     #         x = True
@@ -98,10 +98,10 @@ def main():
                 MotorControl(motor, speed=0.15)
 
     #             print('runtime : '+str(timeit.default_timer() - start))
-        except:
-            servo.detach()
-            motor.stop()
-            break  
+#         except:
+#             servo.detach()
+#             motor.stop()
+#             break  
 #     cam.release()
 
 
