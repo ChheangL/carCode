@@ -93,9 +93,9 @@ def main():
             print(timeit.default_timer() - start1,' ',myAngle)
             ServoControl(servo, myAngle)
             if myAngle >-20.0 and myAngle < 20.0:
-                MotorControl(motor, speed=0.3)
+                MotorControl(motor, speed=0.15)
             else:
-                MotorControl(motor, speed=0.3)
+                MotorControl(motor, speed=0.15)
 
     #             print('runtime : '+str(timeit.default_timer() - start))
         except:
