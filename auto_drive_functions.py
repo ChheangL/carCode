@@ -33,9 +33,10 @@ def retrieve_angle(s1,h1,hd,layer,img_path,frame):
         if len(points)==6:break
     if len(points) < 3:
         one_side = one_side_check(edges,frame)
-        if not np.isnan(np.mean(one_side[0])): return one_side_check(edges,frame)
+        if not np.isnan(np.mean(one_side[0])): return one_side
     # return null if no points found
     if len(points) < 3: return allPoints,np.NaN,np.NaN,np.array([np.NaN]) 
+    points[:,1] = 720-points[:,1]
     check = vector_checkV2(points)
     if not np.isnan(check[0]): return allPoints,points,np.NaN,check  #found only one sided
     mid_points = mid_angle(data=points, width=frame.width, height=frame.height) #found two-sides and proceed to calculate angle
@@ -49,15 +50,18 @@ def one_side_check(edges,frame):
         left = edges.BND[i+1]
         if right !=0:
             pright = np.append(pright,[frame.fline[str(i+1)][int(right)]],axis=0)
-            if len(pright)==4: 
+            if len(pright)==4:
                 points = pright
+                points[:,1] = 720-points[:,1]
                 degree = vector_checkV1(points)
                 return points,points,np.array([-45,-45]),degree
                 break
         if left !=0:
+            print(i)
             pleft= np.append(pleft,[frame.fline[str(i+2)][int(left)]],axis=0)
-            if len(pleft)==4: 
+            if len(pleft)==4:
                 points = pleft
+                points[:,1] = 720-points[:,1]
                 degree = vector_checkV1(points)
                 return points,points,np.array([45,45]),degree
                 break
