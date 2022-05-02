@@ -63,7 +63,7 @@ def main():
     x = False
     startTimer = True
     while True:
-#         try:
+         try:
             if startTimer :
                 start1 = timeit.default_timer()
             else :
@@ -93,15 +93,15 @@ def main():
             print(timeit.default_timer() - start1,' ',myAngle)
             ServoControl(servo, myAngle)
             if myAngle >-20.0 and myAngle < 20.0:
-                MotorControl(motor, speed=0.2)
+                MotorControl(motor, speed=0.15)
             else:
                 MotorControl(motor, speed=0.15)
 
     #             print('runtime : '+str(timeit.default_timer() - start))
-#         except:
-#             servo.detach()
-#             motor.stop()
-#             break  
+         except:
+             servo.detach()
+             motor.stop()
+             break  
 #     cam.release()
 
 
