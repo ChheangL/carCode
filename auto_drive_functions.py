@@ -33,9 +33,16 @@ def retrieve_angle(s1,h1,hd,layer,img_path,frame):
         if len(points)==6:break
     if len(points) < 3:
         one_side = one_side_check(edges,frame)
+<<<<<<< HEAD
         if not np.isnan(one_side[0][0]): return one_side_check(edges,frame)
     # return null if no points found
     if len(points) < 3: return np.NaN,np.NaN,np.array([np.NaN]) 
+=======
+        if not np.isnan(np.mean(one_side[0])): return one_side
+    # return null if no points found
+    if len(points) < 3: return allPoints,np.NaN,np.NaN,np.array([np.NaN]) 
+    points[:,1] = 720-points[:,1]
+>>>>>>> d7ca3b3ade147c6fcf628513ae29b60d01fb77fa
     check = vector_checkV2(points)
     if not np.isnan(check[0]): return points,np.NaN,check  #found only one sided
     mid_points = mid_angle(data=points, width=frame.width, height=frame.height) #found two-sides and proceed to calculate angle
@@ -49,20 +56,30 @@ def one_side_check(edges,frame):
         left = edges.BND[i+1]
         if right !=0:
             pright = np.append(pright,[frame.fline[str(i+1)][int(right)]],axis=0)
-            if len(pright)==4: 
+            if len(pright)==4:
                 points = pright
+<<<<<<< HEAD
+=======
+                points[:,1] = 720-points[:,1]
+>>>>>>> d7ca3b3ade147c6fcf628513ae29b60d01fb77fa
                 degree = vector_checkV1(points)
                 return points,points,np.array([-45,-45]),degree
                 break
         if left !=0:
+            print(i)
             pleft= np.append(pleft,[frame.fline[str(i+2)][int(left)]],axis=0)
-            if len(pleft)==4: 
+            if len(pleft)==4:
                 points = pleft
+<<<<<<< HEAD
+=======
+                points[:,1] = 720-points[:,1]
+>>>>>>> d7ca3b3ade147c6fcf628513ae29b60d01fb77fa
                 degree = vector_checkV1(points)
                 return points,points,np.array([45,45]),degree
                 break
     return [np.NaN,np.NaN],np.NaN,np.NaN
 
+<<<<<<< HEAD
 def vector_checkV1(points):
     if len(points[:,0]) >= 4 : 
         points[:,1] = 720- points[:,1]
@@ -73,6 +90,9 @@ def vector_checkV1(points):
         #return in degree
         return np.degrees(radians)
         
+=======
+
+>>>>>>> d7ca3b3ade147c6fcf628513ae29b60d01fb77fa
 def vector_checkV2(points):
     if len(points[:,0]) >= 4 : 
         points[:,1] = 720- points[:,1]
@@ -86,6 +106,13 @@ def vector_checkV2(points):
         else :
             #not a side
             return np.array([np.NaN,np.NaN])
+def vector_checkV1(points):
+    if len(points[:,0]) >= 4 : 
+        vector1 = points[2]-points[0]
+        vector2 = points[3]-points[1]
+        radians = np.array([math.atan(vector1[0]/vector1[1]),math.atan(vector2[0]/vector2[1])])
+        #return in degree
+        return np.degrees(radians)
         
 
 
