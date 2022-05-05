@@ -72,7 +72,7 @@ def main():
     #         cv2.imshow("frame", img)
     #         cv2.waitKey(1)
     #             print('resolution: ',np.array(img).shape)
-            _,points,_,myAngle = retrieve_angle(s1=50,h1=3, hd=20,layer = 0,img_path=img, frame=frame1)
+            _,points,_,myAngle = retrieve_angle(s1=50,h1=5, hd=15,layer = 0,img_path=img, frame=frame1)
             print(points)
     #       if not x:
     #         Ang1 = np.mean(myAngle)
