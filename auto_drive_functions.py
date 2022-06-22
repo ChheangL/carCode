@@ -1,10 +1,10 @@
 import numpy as np
 import math
+import matplotlib.pyplot as plt
 from ImageFrame import Frame
 from EdgeFinderV2 import EdgeFinder as ef
 
 previous_angle= np.array([0,0])
-
 
 def mid_angle(data,width,height):
     
@@ -25,26 +25,37 @@ def retrieve_angle(s1,h1,hd,layer,img_path,frame):
     data = frame.get_data(img_path,layer) #select the data    
     edges = ef(s1,h1, hd,data) #calculate the Boundary
     print(edges.BND)
-
-    #capture the coordinate
+    #Covert eges.BND to the x-y coordinates
     allPoints = np.array([frame.fline[i][int(edges.BND[int(i)-1])]for i in frame.fline.keys()])
+    
+    #Determining the case:
+    
+    #case 1# both sides have boundary for 2nd - 4th pairs
+    # if after loop point is empty or not enough points = break
     points = np.empty([0,2],int)
-    for i in range(2,len(edges.BND)-6,2):
+    for i in range(2,len(edges.BND),2):
         if edges.BND[i] != 0 and edges.BND[i+1]!=0 : 
             points= np.append(points,[frame.fline[str(i+1)][int(edges.BND[i])]],axis=0)
             points= np.append(points,[frame.fline[str(i+2)][int(edges.BND[i+1])]],axis=0)
-        if len(points)==6:break 
+        if len(points)==6:break
+    #case 2# one side /return degree
+    # if the points converted is less than 3 then one side case is use    
     if len(points) < 3:
         one_side = one_side_check(edges,frame)
-        if not np.isnan(one_side[0]): return one_side
+        if not np.isnan(one_side[0]): return one_side, allPoints
+    
     # return null if no points found
-    if len(points) < 3: return np.array([np.NaN]) 
+    if len(points) < 3: return np.array([np.NaN]), allPoints
+    
+    #case 3# one side but detected as two side
     check = vector_checkV2(points)
-    if not np.isnan(check[0]): return check  #found only one sided
+    if not np.isnan(check[0]): return check, allPoints  #found only one sided
+    
+    #completeing case 1# calculating the degree
     mid_points = mid_angle(data=points, width=frame.width, height=frame.height) #found two-sides and proceed to calculate angle
-    global previous_angle
-    previous_angle = mid_points[:,2]
-    return previous_angle
+    global previous_angle 
+    previous_angle = mid_points[:,2] #save to previous angle to use when angle are not found
+    return previous_angle,allPoints
 
 def one_side_check(edges,frame):
     pright = np.empty([0,2],int)
