@@ -51,17 +51,19 @@ def main():
        try:
         GreenLED.on() # Green LED action
         camera.capture(img,format='rgb')
-        myAngle,allPoints = retrieve_angle(s1=50,h1=3, hd=30,layer = 0,img_path=img, frame=frame1)
+        myAngle,allPoints,points = retrieve_angle(s1=50,h1=4, hd=5,layer = 0,img_path=img, frame=frame1)
         myAngle = np.mean(myAngle)
-        #plt.imshow(img)
-        #plt.plot(allPoints[:,0],allPoints[:,1],'b.')
-        #plt.plot([1280/2,(1280/2)+100*np.cos(np.deg2rad(((-1)*myAngle)+90))],[720,720-100*np.sin(np.deg2rad(((-1)*myAngle)+90))])
+        plt.imshow(img)
+        plt.plot(points[:,0],720-points[:,1],"ro")
+        plt.plot(allPoints[:,0],allPoints[:,1],'b.')
+
+        plt.plot([1280/2,(1280/2)+100*np.cos(np.deg2rad(((-1)*myAngle)+90))],[720,720-100*np.sin(np.deg2rad(((-1)*myAngle)+90))])
         GreenLED.off()
         RedLED.off()
         print(myAngle)
 #         print(timeit.default_timer() - start1,' ',myAngle)
         ServoControl(servo, myAngle)
-        #plt.show()
+        plt.show()
 
         if myAngle >-20.0 and myAngle < 20.0:
             MotorControl(motor, speed=0.2)
