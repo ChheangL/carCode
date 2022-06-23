@@ -20,9 +20,9 @@ def mid_angle(data,width,height):
         values = np.append(values,[np.append(mid,[angle_degree])],axis=0)
     return values
 
-def retrieve_angle(s1,h1,hd,layer,img_path,frame):
+def retrieve_angle(s1,h1,hd,layer,img_data,frame):
 
-    data = frame.get_data(img_path,layer) #select the data    
+    data = frame.get_data(img_data,layer) #select the data    
     edges = ef(s1,h1, hd,data) #calculate the Boundary
     print(edges.BND)
 

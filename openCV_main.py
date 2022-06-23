@@ -3,12 +3,46 @@ from ImageFrame import Frame
 import numpy as np
 from hardwareControl import *
 import timeit
-from picamera import PiCamera
+import cv2, queue, threading, time
+
+# bufferless VideoCapture
+class VideoCapture:
+
+  def __init__(self, name):
+    self.cap = cv2.VideoCapture(name)
+    self.cap.set(3,1280)
+    self.cap.set(4,720)
+    self.q = queue.Queue()
+    t = threading.Thread(target=self._reader)
+    t.daemon = True
+    t.start()
+
+  # read frames as soon as they are available, keeping only most recent one
+  def _reader(self):
+    while True:
+      ret, frame = self.cap.read()
+      if not ret:
+        break
+      if not self.q.empty():
+        try:
+          self.q.get_nowait()   # discard previous (unprocessed) frame
+        except queue.Empty:
+          pass
+      self.q.put(frame)
+
+  def read(self):
+    return self.q.get()
+
+
+
+
+
+
+# ----------------------------------------------------------------
 
 frame1 = Frame(1280,720,10)
+cam = VideoCapture(0)
 
-cam = PiCamera()
-cam.resolution=(1280,720)
 
 # Ruduce Jitter
 Device.pin_factory = PiGPIOFactory()
@@ -25,8 +59,14 @@ motor = Motor(forward = 23, backward = 24, enable = 25, pwm=True)
 previous_angle = 0
 
 def main():
+    x = False
+    startTimer = True
     while True:
       try:
+        if startTimer :
+            start1 = timeit.default_timer()
+        else :
+            start2 = timeit.default_timer()
         img = cam.read()
         myAngle = retrieve_angle(s1=50,h1=3, hd=20,layer = 0,img_data=img, frame=frame1)
         myAngle = np.mean(myAngle)
