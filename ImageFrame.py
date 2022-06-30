@@ -7,7 +7,8 @@ class Frame:
     """
     
         
-    def get_frame_coordinate(self,width,height,theta):
+    def get_frame_coordinate(self,width,h,theta):
+        height = int(h/2)
         print('angle = '+str(theta)+', width='+str(width)+', height'+str(height))
         tan = math.tan(math.radians(theta))
         lr = np.array([[int(width/2)-1,height-1]])
@@ -17,8 +18,8 @@ class Frame:
             for jter in range(1,height):
                 test = np.abs([tan-jter/iter])
                 if test[0]<0.01:
-                    lr = np.append(lr,[[int(width/2+iter-1),height-jter+1-1]],axis=0)
-                    ll = np.append(ll,[[int(width/2-iter-1),height-jter+1-1]],axis=0)
+                    lr = np.append(lr,[[int(width/2+iter-1),int(h/2)+height-jter+1-1]],axis=0)
+                    ll = np.append(ll,[[int(width/2-iter-1),int(h/2)+height-jter+1-1]],axis=0)
                     break
                 else:
                     if not jter==height-1: continue
@@ -37,7 +38,7 @@ class Frame:
                 self.fline = {}
                 i = 1
                 while angle*i < 90:
-                    tempRight,tempLeft = self.get_frame_coordinate(width=self.width,height=self.height,theta=angle*i)
+                    tempRight,tempLeft = self.get_frame_coordinate(width=self.width,h=self.height,theta=angle*i)
                     self.fline[str(2*i-1)] = tempRight
                     self.fline[str(2*i)] = tempLeft
                     i = i+1

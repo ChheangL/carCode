@@ -68,7 +68,7 @@ def main():
         else :
             start2 = timeit.default_timer()
         img = cam.read()
-        myAngle = retrieve_angle(s1=50,h1=3, hd=20,layer = 0,img_data=img, frame=frame1)
+        myAngle = retrieve_angle(s1=50,h1=3, hd=20,layer = 0,img_path=img, frame=frame1)
         myAngle = np.mean(myAngle)
         print(timeit.default_timer() - start1,' ',myAngle)
         ServoControl(servo, myAngle)
