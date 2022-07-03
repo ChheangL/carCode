@@ -5,7 +5,24 @@ import math
 class Frame:
     """get the coordinate to the lines based on the angle, width and hight provided
     """
-    
+    def __init__(self, width, height, angle):
+            self.width = width
+            self.height = height
+            self.angle = angle
+            try:
+                self.fline = self.unserilize().fline
+            except:
+                print('Calculating Frame ...')
+                self.fline = {}
+                i = 1
+                while angle*i < 90:
+                    tempRight,tempLeft = self.get_frame_coordinate(width=self.width,h=self.height,theta=angle*i)
+                    self.fline[str(2*i-1)] = tempRight
+                    self.fline[str(2*i)] = tempLeft
+                    i = i+1
+                    
+                self.serilization()
+                print('Done!')
         
     def get_frame_coordinate(self,width,h,theta):
         height = int(h/2)
@@ -27,24 +44,7 @@ class Frame:
                     ll = np.append(ll,[[int(width/2-iter-1),ll[iter-1,1]]],axis=0)
         return lr,ll
 
-    def __init__(self, width, height, angle):
-            self.width = width
-            self.height = height
-            self.angle = angle
-            try:
-                self.fline = self.unserilize().fline
-            except:
-                print('Calculating Frame ...')
-                self.fline = {}
-                i = 1
-                while angle*i < 90:
-                    tempRight,tempLeft = self.get_frame_coordinate(width=self.width,h=self.height,theta=angle*i)
-                    self.fline[str(2*i-1)] = tempRight
-                    self.fline[str(2*i)] = tempLeft
-                    i = i+1
-                    
-                self.serilization()
-                print('Done!')
+    
             
    
     def get_data(self,img,layer=np.NaN):
