@@ -16,7 +16,6 @@ def mid_angle(data,width,height):
     plt.plot(data[:,0],data[:,1],"ko")
     for i in range (0, data_size,2):
         mid = (data[i] + data[i+1])/2
-        plt.plot(mid[0],mid[1],'b.')
         tan = (mid[0]-(width/2.))/(mid[1])
         angle_radiant = math.atan(tan)
         angle_degree = math.degrees(angle_radiant)
