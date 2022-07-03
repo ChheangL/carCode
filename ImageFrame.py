@@ -38,14 +38,10 @@ class Frame:
                 print('Calculating Frame ...')
                 self.lines_frame = {}
                 i = 1
-                lineNum = int(180/angle)
                 while angle*i < 90:
-                    #print(i)
-                    print(angle*i)
                     tempRight,tempLeft = self.get_frame_coordinate(width=self.width,height=self.height,theta=angle*i)
-                    print('L'+str(lineNum-i))
-                    self.lines_frame['L'+str(i)] = tempRight
-                    self.lines_frame['L'+str(lineNum-i)] = tempLeft
+                    self.lines_frame[str(2*i-1)] = tempRight
+                    self.lines_frame[str(2*i)] = tempLeft
                     i = i+1
                     
                 self.serilization()
@@ -58,17 +54,10 @@ class Frame:
         #img = 255.0*(img/255.0)**6
         #self.plot_all_line('k')
         #imshow(img)
-        lines = {}
+        data = np.empty([len(self.lines_frame['1']),0],int)
         for key in self.lines_frame.keys():
-            count = 0
-            temp2 = np.empty((0,1),float)
-            for cord in self.lines_frame[key]:
-                #print(lines[key][count])
-                temp1 = img[int(cord[1]),int(cord[0])]
-                temp2 = np.append(temp2,[temp1])
-                count+=1
-            lines[key] = temp2
-        return lines
+            data = np.append(data,np.array([[img[y,x]] for x,y in self.lines_frame[key]]),axis=1)
+        return data
     #save lines_frame to cvs as 'frame.cvs'
 
     def serilization(self):
