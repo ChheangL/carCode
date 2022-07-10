@@ -7,7 +7,6 @@ from EdgeFinderV2 import EdgeFinder as ef
 previous_angle= np.array([0,0])
 
 def mid_angle(data,width,height):
-    
     data_size = int(len(data))
     values = np.empty((0,3),float)
     for i in range (0, data_size,2):
@@ -15,15 +14,13 @@ def mid_angle(data,width,height):
         tan = (mid[0]-(width/2.))/(mid[1])
         angle_radiant = math.atan(tan)
         angle_degree = math.degrees(angle_radiant)
-        #print('The degree is {:.2f}'.format(angle_degree))
-        #angle = ((-1)*angle_degree if angle_degree < 0 else 180-angle_degree)
         values = np.append(values,[np.append(mid,[angle_degree])],axis=0)
     print(values)
     return values
 
-def retrieve_angle(s1,h1,hd,layer,img_path,frame):
+def retrieve_angle(s1,h1,hd,layer,img_data,frame):
 
-    data = frame.get_data(img_path,layer) #select the data    
+    data = frame.get_data(img_data,layer) #select the data    
     edges = ef(s1,h1, hd,data) #calculate the Boundary
     print(edges.BND)
     #Covert eges.BND to the x-y coordinates
