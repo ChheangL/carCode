@@ -37,7 +37,7 @@ class Frame:
                 print('Calculating Frame ...')
                 self.fline = {}
                 i = 1
-                while angle*i < 90:
+                while angle*i < 70:
                     tempRight,tempLeft = self.get_frame_coordinate(width=self.width,h=self.height,theta=angle*i)
                     self.fline[str(2*i-1)] = tempRight
                     self.fline[str(2*i)] = tempLeft
