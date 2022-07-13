@@ -2,18 +2,7 @@ import numpy as np
 
 class EdgeFinder :
     """
-       This perform the 3-sigma method on a single dimension data set
-       Attribue : 
-           data (numpy array)
-           s1 (int)
-           hd (int)
-           abnormal (dictionary)
-       Method :
-           return(void)       __init__(self,s1,hd,data) : is a constructor
-           return(list)       get_3sigmaBound(self,data_seg) : for getting the boundary in the interval
-           return(dictionary) check_abnormal(self,init) : perform checking for the hd interval
-           return(dictionary) perform_3sig(self) : perform the 3 sigma method for the entier data set
-           return(void)       plot_data(self) : ploting the data on the graph
+       This is an improve version of 3sigma method
     """
     def __init__(self,s1,h1,hd,Data):
         self.data = Data

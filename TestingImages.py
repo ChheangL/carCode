@@ -13,7 +13,7 @@ camera.framerate=30
 camera.rotation = 180
 #frame1 = Frame(1280,720,10)
 
-# camera.start_preview()
+camera.start_preview()
 array = np.empty((720,1280,3),dtype=np.uint8)
 for i in range(1,100,1):
 	camera.capture("TestingImage/Image"+str(i)+".jpg")

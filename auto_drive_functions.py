@@ -7,22 +7,14 @@ from EdgeFinderV2 import EdgeFinder as ef
 previous_angle= np.array([0,0])
 
 def mid_angle(data,width,height):
-    
     data_size = int(len(data))
-    print(width)
-    print(height)
     values = np.empty((0,3),float)
-    plt.axis((0,1280,0,720))
-    plt.plot(data[:,0],data[:,1],"ko")
     for i in range (0, data_size,2):
         mid = (data[i] + data[i+1])/2
         tan = (mid[0]-(width/2.))/(mid[1])
         angle_radiant = math.atan(tan)
         angle_degree = math.degrees(angle_radiant)
-        #print('The degree is {:.2f}'.format(angle_degree))
-        #angle = ((-1)*angle_degree if angle_degree < 0 else 180-angle_degree)
         values = np.append(values,[np.append(mid,[angle_degree])],axis=0)
-    plt.show()
     print(values)
     return values
 
