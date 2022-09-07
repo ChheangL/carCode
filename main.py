@@ -2,14 +2,10 @@ from auto_drive_functions import retrieve_angle
 from ImageFrame import Frame
 import numpy as np
 from hardwareControl import *
-import timeit
 from picamera import PiCamera
-from gpiozero import LED #import RPi.GPIO as GPIO
 import matplotlib.pyplot as plt
 
 
-RedLED = LED(5)
-GreenLED = LED(4)
 
 
 """
@@ -47,33 +43,40 @@ previous_angle = 0
 
 
 def main():
+    fileNumber = 0
     while True:
-       try:
-        GreenLED.on() # Green LED action
         camera.capture(img,format='rgb')
-        myAngle,allPoints,points = retrieve_angle(s1=50,h1=4, hd=5,layer = 0,img_path=img, frame=frame1)
+        myAngle,allPoints,points = retrieve_angle(s1=50,h1=4, hd=5,layer=2,img_data=img, frame=frame1)
         myAngle = np.mean(myAngle)
-#         plt.imshow(img)
-#         plt.plot(points[:,0],720-points[:,1],"ro")
-#         plt.plot(allPoints[:,0],allPoints[:,1],'b.')
-# 
-#         plt.plot([1280/2,(1280/2)+100*np.cos(np.deg2rad(((-1)*myAngle)+90))],[720,720-100*np.sin(np.deg2rad(((-1)*myAngle)+90))])
-        GreenLED.off()
-        RedLED.off()
+        
+
         print(myAngle)
 #         print(timeit.default_timer() - start1,' ',myAngle)
-        ServoControl(servo, myAngle)
-#         plt.show34()
+        if not np.isnan(myAngle):
+            ServoControl(servo, myAngle)
+        else:
+            servo.detach()
+            motor.stop()
+            break 
+        
+        #plt.show()
 
         if myAngle >-20.0 and myAngle < 20.0:
             MotorControl(motor, speed=0.2)
         else:
             MotorControl(motor, speed=0.15)
-       except:
-            servo.detach()
-            motor.stop()
-            break 
+        process_figure(img,points,allPoints,myAngle,fileNumber)
+        fileNumber += 1
+            
 #     cam.release()
 
-
+def process_figure(img,points,allPoints,myAngle,fileNumber):
+    plt.imshow(img)
+#     plt.savefig("raw/image"+str(fileNumber)+".png",bbox_inches='tight')
+    plt.plot(points[:,0],720-points[:,1],"ro")
+    plt.plot(allPoints[:,0],allPoints[:,1],'b.')
+    plt.plot([1280/2,(1280/2)+100*np.cos(np.deg2rad(((-1)*myAngle)+90))],[720,720-100*np.sin(np.deg2rad(((-1)*myAngle)+90))])
+    plt.savefig("plot/image"+str(fileNumber)+".png",bbox_inches='tight')
+    plt.close()
+    
 main()
