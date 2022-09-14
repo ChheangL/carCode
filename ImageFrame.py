@@ -17,12 +17,11 @@ class Frame:
                 print('Calculating Frame ...')
                 self.fline = {}
                 i = 1
-                while angle*i < 50:
+                while angle*i < 50: #maximum value of angle 
                     tempRight,tempLeft = self.get_frame_coordinate(width=self.width,h=self.height,theta=angle*i)
-                    self.fline[str(2*i-1)] = tempRight
-                    self.fline[str(2*i)] = tempLeft
+                    self.fline[str(2*i-1)] = tempRight #saving the temp right to 1,3,5,7 ...
+                    self.fline[str(2*i)] = tempLeft    #saving the temp left to  2,4,6,8 ...
                     i = i+1
-                    
                 self.serialize()
                 print('Done!')
         
