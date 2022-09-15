@@ -5,7 +5,7 @@ class EdgeFinder :
        This is an improve version of 3sigma method
     """
     def __init__(self,s1,h1,hd,Data):
-        self.data = Data
+        self.data = Data             #The data is matric of [Row= size of the lines : Columns = lines number]
         self.s1 = s1
         self.hd = hd
         self.h1 = h1
@@ -14,9 +14,12 @@ class EdgeFinder :
     #get the upper and lower bound
 
     def perform_3sig(self):
-        BND = np.zeros(self.data.shape[1])
-        a = 0
+        BND = np.zeros(self.data.shape[1]) #get an empty array in the shape of the second dimension of the data
+        #setting up the a segment init and b segmnet end (s1)
+        a = 0  
         b = self.s1
+                
+        #undergo loop all data given
         while True:
             segCal = self.data[a:b,:] #creating segment to calculate mean and Std
             plusCheck = np.mean(segCal,axis=0) + 3* np.std(segCal,axis=0)
