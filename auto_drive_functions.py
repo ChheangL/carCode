@@ -6,6 +6,13 @@ from EdgeFinderV2 import EdgeFinder as ef
 
 previous_angle= np.array([0,0])
 
+"""
+Return formate for Retrieve angle is 
+[Angle1 , Angle2] , Mid_points* , points , allPoints
+
+*Nan for case 2 and case3
+"""
+
 def retrieve_angle(s1,h1,hd,layer,img_data,frame):
 
     data = frame.get_data(img_data,layer) #select the data    
@@ -26,13 +33,13 @@ def retrieve_angle(s1,h1,hd,layer,img_data,frame):
         if len(points)==6:
             #case 3 one side but detected as two side
             check = vector_checkV2(points)
-            if not np.isnan(check[0]): return check,points#,allPoints  # one sided found
+            if not np.isnan(check[0]): return [check,check],[np.NaN],points#,allPoints  # one sided found
             #completeing case 1# calculating the degree
             mid_points = mid_angle(data=points, width=frame.width, height=frame.height) #found two-sides and proceed to calculate angle
             global previous_angle 
-            previous_angle = mid_points[:,2] #save to previous angle to use when angle are not found
+            previous_angle, mid_points = mid_points #save to previous angle to use when angle are not found
             print("Both side found")
-            return previous_angle,points#,allPoints
+            return previous_angle,mid_points,points#,allPoints
         
     #case 2# one side /return degree
     # if the points converted is less than 3 then one side case is use    
@@ -40,27 +47,41 @@ def retrieve_angle(s1,h1,hd,layer,img_data,frame):
         one_side = one_side_check(edges,frame)
         if not np.isnan(one_side[0]):
             print("One side detected")
-            return one_side,points,#allPoints
+            return [one_side,one_side],[np.NaN],points,#allPoints
+        else:
+            # return null if no points found
+            return np.array([np.NaN]),[np.NaN],points#,allPoints
     
-    # return null if no points found
-    if len(points) < 3: return np.array([np.NaN]),points#,allPoints
     
-    
-    
+"""
+Description : Functions for calculating in different cases are presented below
+    1. mid_angle()      : calculate the mid-points and angles 
+    2. one_side_check() : check which side had the road and calculate the angle needed
+    3. vector_checkV1() : Calculate the angle for case_2
+    4. vector_checkV1() : calculate the angle for case_3
+"""    
     
 
 
 def mid_angle(data,width,height):
+    print(data)
     data_size = int(len(data))
-    values = np.empty((0,3),float)
+    result_angles1 = np.empty((0,1),float)
+    result_angles2 = np.empty((0,1),float)
+    mids = np.empty((0,2),float)
     for i in range (0, data_size,2):
         mid = (data[i] + data[i+1])/2
         tan = (mid[0]-(width/2.))/(mid[1])
         angle_radiant = math.atan(tan)
         angle_degree = math.degrees(angle_radiant)
-        values = np.append(values,[np.append(mid,[angle_degree])],axis=0)
-    print(values)
-    return values
+        mids = np.append(mids,[mid],axis= 0)
+        result_angles1 = np.append(result_angles1,[[angle_degree]],axis=0)
+    for i in range(1,len(mids)):
+        angle_degree = math.degrees(math.atan((mids[i,0]-(mids[0,0]))/(mids[i,1]-mids[0,1])))
+        result_angles2 = np.append(result_angles2,[[angle_degree]],axis=0)
+    print(result_angles1)
+    print(result_angles2)
+    return [result_angles1,result_angles2],mids
 
 
 def one_side_check(edges,frame):
@@ -102,6 +123,7 @@ def vector_checkV2(points):
         else :
             #not a side
             return np.array([np.NaN,np.NaN])
+
 def vector_checkV1(points):
     if len(points[:,0]) >= 4 :
         global previous_angle
