@@ -33,7 +33,9 @@ def retrieve_angle(s1,h1,hd,layer,img_data,frame):
         if len(points)==6:
             #case 3 one side but detected as two side
             check = vector_checkV2(points)
-            if not np.isnan(check[0]): return [check,check],[np.NaN],points#,allPoints  # one sided found
+            if not np.isnan(check[0]):
+                print("it case3")
+                return [check,check],[np.NaN],points#,allPoints  # one sided found
             #completeing case 1# calculating the degree
             mid_points = mid_angle(data=points, width=frame.width, height=frame.height) #found two-sides and proceed to calculate angle
             global previous_angle 
@@ -43,13 +45,14 @@ def retrieve_angle(s1,h1,hd,layer,img_data,frame):
         
     #case 2# one side /return degree
     # if the points converted is less than 3 then one side case is use    
-    if len(points) < 3:
+    if len(points) < 6:
         one_side = one_side_check(edges,frame)
-        if not np.isnan(one_side[0]):
+        if not np.isnan(np.mean(one_side[0])):
             print("One side detected")
             return [one_side,one_side],[np.NaN],points,#allPoints
         else:
             # return null if no points found
+            print("null boundary")
             return np.array([np.NaN]),[np.NaN],points#,allPoints
     
     
@@ -98,7 +101,6 @@ def one_side_check(edges,frame):
                 return degree
                 break
         if left !=0:
-            print(i)
             pleft= np.append(pleft,[frame.fline[str(i+2)][int(left)]],axis=0)
             if len(pleft)==4:
                 points = pleft

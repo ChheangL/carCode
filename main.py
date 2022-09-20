@@ -3,7 +3,8 @@ from ImageFrame import Frame
 import numpy as np
 from picamera import PiCamera
 import matplotlib.pyplot as plt
-
+from hardwareControl import *
+import time
 """
 The main function use frame and retrieve_angle function to get the boundary from the images
 """
@@ -28,15 +29,19 @@ previous_angle = 0
 def main():
 #    fileNumber = 0
     while True:
+        start_time = time.time()
         camera.capture(img,format='rgb')
-        myAngle,allPoints,points = retrieve_angle(s1=50,h1=4, hd=5,layer=2,img_data=img, frame=frame1)
-        myAngle = np.mean(myAngle)
+        myAngle,_,points = retrieve_angle(s1=50,h1=4, hd=5,layer=0,img_data=img, frame=frame1)
+        if np.isnan(np.mean(myAngle[0])):
+            print("Data is not found!!!!")
+            continue
+        myAngle1 = np.mean(myAngle[0])
+        myAngle2 = np.mean(myAngle[1])
 
         print(myAngle)
 #         print(timeit.default_timer() - start1,' ',myAngle)
-        if np.isnan(myAngle): break
-        
-
+        send(int(myAngle1),int(myAngle2))
+        print("--- %s seconds ---" %(time.time()-start_time))
 #        process_figure(img,points,allPoints,myAngle,fileNumber)
 #       fileNumber += 1
             
