@@ -14,6 +14,7 @@ camera = PiCamera() #start the pi camera as camera
 camera.rotation = 180
 camera.resolution = (1280,720)
 camera.framerate=30
+camera.start_preview(alpha=200)
 
 
 #Setting up the frame instances and it size
@@ -32,6 +33,8 @@ def main():
         start_time = time.time()
         camera.capture(img,format='rgb')
         myAngle,_,points = retrieve_angle(s1=50,h1=4, hd=5,layer=0,img_data=img, frame=frame1)
+        print("--- %s seconds ---" %(time.time()-start_time))
+
         if np.isnan(np.mean(myAngle[0])):
             print("Data is not found!!!!")
             continue
@@ -41,7 +44,6 @@ def main():
         print(myAngle)
 #         print(timeit.default_timer() - start1,' ',myAngle)
         send(int(myAngle1),int(myAngle2))
-        print("--- %s seconds ---" %(time.time()-start_time))
 #        process_figure(img,points,allPoints,myAngle,fileNumber)
 #       fileNumber += 1
             

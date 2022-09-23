@@ -1,10 +1,4 @@
-import numpy as np
-import matplotlib.pyplot as plt
 from picamera import PiCamera
-from auto_drive_functions import retrieve_angle
-from ImageFrame import Frame
-from EdgeFinderV2 import EdgeFinder as ef
-from ImageFrame import Frame
 from time import sleep
 camera = PiCamera()
 
@@ -14,11 +8,10 @@ camera.rotation = 180
 #frame1 = Frame(1280,720,10)
 
 camera.start_preview()
-array = np.empty((720,1280,3),dtype=np.uint8)
 for i in range(1,100,1):
 	camera.capture("TestingImage/Image"+str(i)+".jpg")
 	print("sleeping")
-	sleep(5)
+	sleep(1)
 	print("wakeup")
 # 
 # data = frame1.get_data(array,0) #select the data    
