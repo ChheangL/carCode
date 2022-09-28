@@ -46,10 +46,10 @@ def retrieve_angle(s1,h1,hd,layer,img_data,frame):
     #case 2# one side /return degree
     # if the points converted is less than 3 then one side case is use    
     if len(points) < 6:
-        one_side = one_side_check(edges,frame)
-        if not np.isnan(np.mean(one_side[0])):
+        one_side,points = one_side_check(edges,frame)
+        if not np.isnan(np.mean(one_side)):
             print("One side detected")
-            return [one_side,one_side],[np.NaN],points,#allPoints
+            return [one_side,one_side],[np.NaN],points#,allPoints
         else:
             # return null if no points found
             print("null boundary")
@@ -67,7 +67,6 @@ Description : Functions for calculating in different cases are presented below
 
 
 def mid_angle(data,width,height):
-    print(data)
     data_size = int(len(data))
     result_angles1 = np.empty((0,1),float)
     result_angles2 = np.empty((0,1),float)
@@ -82,8 +81,6 @@ def mid_angle(data,width,height):
     for i in range(1,len(mids)):
         angle_degree = math.degrees(math.atan((mids[i,0]-(mids[0,0]))/(mids[i,1]-mids[0,1])))
         result_angles2 = np.append(result_angles2,[[angle_degree]],axis=0)
-    print(result_angles1)
-    print(result_angles2)
     return [result_angles1,result_angles2],mids
 
 
@@ -98,16 +95,16 @@ def one_side_check(edges,frame):
             if len(pright)==4:
                 points = pright
                 degree = vector_checkV1(points)
-                return degree
+                return degree,points
                 break
         if left !=0:
             pleft= np.append(pleft,[frame.fline[str(i+2)][int(left)]],axis=0)
             if len(pleft)==4:
                 points = pleft
                 degree = vector_checkV1(points)
-                return degree
+                return degree,points
                 break
-    return [np.NaN,np.NaN]
+    return np.NaN,np.NaN
 
 def vector_checkV2(points):
     if len(points[:,0]) >= 4 :
