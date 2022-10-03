@@ -47,7 +47,7 @@ def retrieve_angle(s1,h1,hd,layer,img_data,frame):
     # if the points converted is less than 3 then one side case is use    
     if len(points) < 6:
         one_side,points = one_side_check(edges,frame)
-        if not np.isnan(np.mean(one_side)):
+        if not np.isnan(np.mean(one_side[0])):
             print("One side detected")
             return [one_side,one_side],[np.NaN],points#,allPoints
         else:
@@ -104,7 +104,7 @@ def one_side_check(edges,frame):
                 degree = vector_checkV1(points)
                 return degree,points
                 break
-    return np.NaN,np.NaN
+    return [np.NaN],np.NaN
 
 def vector_checkV2(points):
     if len(points[:,0]) >= 4 :
