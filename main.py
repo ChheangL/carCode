@@ -32,7 +32,7 @@ def main():
     fileNumber = 0
     while True:
         start_time = time.time()
-#        camera.capture("TestingImage/Image"+str(fileNumber)+".jpg")
+        camera.capture("TestingImage/Image"+str(fileNumber)+".jpg")
         camera.capture(img,format='rgb')
         myAngle,_,points = retrieve_angle(s1=50,h1=4, hd=5,layer=0,img_data=img, frame=frame1)
         print("--- %s seconds ---" %(time.time()-start_time))

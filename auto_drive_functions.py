@@ -81,6 +81,7 @@ def mid_angle(data,width,height):
     for i in range(1,len(mids)):
         angle_degree = math.degrees(math.atan((mids[i,0]-(mids[0,0]))/(mids[i,1]-mids[0,1])))
         result_angles2 = np.append(result_angles2,[[angle_degree]],axis=0)
+    fesult_angles2 = np.append(result_angles2,[[np.NaN]],axis=0)
     return [result_angles1,result_angles2],mids
 
 
