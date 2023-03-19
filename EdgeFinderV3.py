@@ -31,3 +31,25 @@ class BoundaryDetector:
                     #boundary_index += [0]
                     detection = False
         return points
+    
+    def ploting_onImage(self,img,id=0):
+        plt.imshow(img)
+        for key in self.frame1.fline.keys():
+            plt.plot(self.frame1.fline[key][:,0],self.frame1.fline[key][:,1],'k.')
+        plt.title("Image {num}".format(num=id))
+        plt.plot(self.boundary[:,0],self.boundary[:,1],"ro")
+        plt.show()
+        
+    def ploting_onGraph(self):
+        for i,j in enumerate(self.boundary[:,0]):
+            plt.plot(range(0,self.data.shape[0]),self.data[:,i],'k.')
+            if not j:
+                plt.show()
+                continue
+            if not i%2:
+                plt.plot([j-self.data.shape[0],j-self.data.shape[0]],[0,160],'r-')
+                #print(f'{j}-{data.shape[0]}={j-data.shape[0]}')
+            else:
+                plt.plot([self.data.shape[0]-j,self.data.shape[0]-j],[0,160],'r-')
+
+            plt.show()
