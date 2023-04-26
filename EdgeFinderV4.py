@@ -12,7 +12,7 @@ class BoundaryDetector:
         self.frame1 = np.array(list(frame.fline.values()))
         self.frame = frame
         self.offset = (img[0].size-9)%(kernal.size+steps)
-        self.sample_point = np.zeros([8,2])
+        self.sample_point = np.zeros([len(frame.fline),2])
         self.boundary = self.find_boundary(self.img,self.kernal,self.frame1,self.offset,self.steps,self.threshold,self.sample_point)
 
 
@@ -23,9 +23,10 @@ class BoundaryDetector:
         for num,fline in enumerate(frame1):        
                 detection = False
                 for t in range(20,fline.shape[0]-offset,kernal.size+steps):
-                    if np.abs(np.sum(kernal*np.array([img[y,x,0] for x,y in fline[t:t+kernal.size]]))) > threshold:
+                    if np.abs(np.sum(kernal*np.array([img[int(y),int(x),0] for x,y in fline[t:t+kernal.size]]))) > threshold:
                         points[num]=fline[t]
-                        detection = True
+                        if points[num][1] > 365:
+                            detection = True
                         break
                 if not detection:
                     points[num]=np.array([0,0])

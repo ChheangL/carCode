@@ -29,20 +29,24 @@ class Frame:
         height = int(h/2) #using the height/2 to mask the top half of the image
         print('angle = '+str(theta)+', width='+str(width)+', height'+str(height))
         tan = math.tan(math.radians(theta))         #calcuate the tan value of that angle
-        lr = np.array([[int(width/2)-1,height-1]])  #init the first point of the right line ex (640/2) and (720-1)
-        ll = np.array([[int(width/2)-1,height-1]])  #init the first point of the left line ex same as above
+        lr = np.zeros([int(width/2),2]) 
+        lr[0]=[int(width/2)-1,h-1]  #init the first point of the right line ex (640/2) and (720-1)
+        ll = np.zeros([int(width/2),2]) 
+        ll[0] =[int(width/2)-1,h-1]   #init the first point of the left line ex same as above
 
         for iter in range(1,int(width/2)):      #looping the horizontal axis starting from 1
             for jter in range(1,height):        #looping the vertical axis starting from 1
                 test = np.abs([tan-jter/iter])  #calculte the error between tangen and the actual value
                 if test[0]<0.01:                #if the error is small push that values of right line and left line
-                    lr = np.append(lr,[[int(width/2+iter-1),int(h/2)+height-jter+1-1]],axis=0)
-                    ll = np.append(ll,[[int(width/2-iter-1),int(h/2)+height-jter+1-1]],axis=0)
+                    lr[iter] = [int(width/2+iter-1),int(h/2+height-jter+1-1)]
+                    ll[iter] = [int(width/2-iter-1),int(h/2+height-jter+1-1)]
                     break
-                else:                           #else the last value will be used
-                    if not jter==height-1: continue
-                    lr = np.append(lr,[[int(width/2+iter-1),lr[iter-1,1]]],axis=0)
-                    ll = np.append(ll,[[int(width/2-iter-1),ll[iter-1,1]]],axis=0)
+                elif jter==height-1:                           #else the last value will be used
+                    if lr[iter-1][1] > h/2+2:
+                        lr[iter] = [int(width/2+iter-1),lr[iter-1][1]]
+                        ll[iter] = [int(width/2-iter-1),ll[iter-1][1]]
+                    break
+                    
         return lr,ll
 
     
