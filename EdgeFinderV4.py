@@ -38,7 +38,6 @@ class BoundaryDetector:
             plt.plot(self.frame.fline[key][:,0],self.frame.fline[key][:,1],'k.')
         plt.title("Image {num}".format(num=id))
         plt.plot(self.boundary[:,0],self.boundary[:,1],"ro")
-        plt.show()
         
     def ploting_onGraph(self):
         for i,j in enumerate(self.boundary[:,0]):
