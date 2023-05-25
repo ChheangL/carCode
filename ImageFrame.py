@@ -42,7 +42,7 @@ class Frame:
                     ll[iter] = [int(width/2-iter-1),int(h/2+height-jter+1-1)]
                     break
                 elif jter==height-1:                           #else the last value will be used
-                    if lr[iter-1][1] > h/2+2:
+                    if lr[iter-1][1] > h/2+2:                   
                         lr[iter] = [int(width/2+iter-1),lr[iter-1][1]]
                         ll[iter] = [int(width/2-iter-1),ll[iter-1][1]]
                     break
@@ -51,7 +51,8 @@ class Frame:
 
     
             
-   # this function is use the get data from the image and return data masked by the frame
+   # this function is use the get data from the image and return data masked by the frame 
+   # for function with numba jit, this function is depricated.
     def get_data(self,img,layer=np.NaN):
         img = np.array(img)
         if not np.isnan(layer) : img = img[:,:,layer]
